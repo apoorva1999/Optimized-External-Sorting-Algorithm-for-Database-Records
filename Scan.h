@@ -12,8 +12,8 @@ public:
 	Iterator * init () const;
 private:
 	RowCount const _count;
-	std::ifstream _file;
-	std::string _currentLine; 
+	mutable std::ifstream _file;
+	mutable std::string _currentLine; 
 }; // class ScanPlan
 
 class ScanIterator : public Iterator

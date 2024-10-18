@@ -9,7 +9,7 @@ class Row
 {	
 public:
 	int size;
-	std::vector<std::string> record;
+	std::vector<int> record;
 	Row () ;
 	Row(int size);
 	virtual ~Row ();
