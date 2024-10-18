@@ -1,13 +1,17 @@
 #pragma once
 
 #include "defs.h"
-
+#include<bits/stdc++.h>
+#define N 10
 typedef uint64_t RowCount;
 
 class Row
-{
+{	
 public:
-	Row ();
+	int size;
+	std::vector<std::string> record;
+	Row () ;
+	Row(int size);
 	virtual ~Row ();
 	// ...
 private:
