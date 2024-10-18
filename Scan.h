@@ -1,4 +1,7 @@
 #include "Iterator.h"
+#include <iostream>
+#include <fstream>
+#include <string>
 
 class ScanPlan : public Plan
 {
@@ -9,6 +12,8 @@ public:
 	Iterator * init () const;
 private:
 	RowCount const _count;
+	std::ifstream _file;
+	std::string _currentLine; 
 }; // class ScanPlan
 
 class ScanIterator : public Iterator
