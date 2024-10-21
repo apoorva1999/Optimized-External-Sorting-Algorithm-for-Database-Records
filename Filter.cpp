@@ -1,7 +1,8 @@
 #include "Filter.h"
-
+#include<bits/stdc++.h>
+#include<iostream>
 FilterPlan::FilterPlan (char const * const name, Plan * const input)
-	: Plan (name), _input (input)
+	: Plan (name), _input (input) // scanPlan
 {
 	TRACE (true);
 } // FilterPlan::FilterPlan
@@ -31,7 +32,8 @@ FilterIterator::~FilterIterator ()
 
 	delete _input;
 
-	traceprintf ("produced %lu of %lu rows\n",
+	
+	traceprintf ("FILTER produced %lu of %lu rows\n",
 			(unsigned long) (_produced),
 			(unsigned long) (_consumed));
 } // FilterIterator::~FilterIterator
@@ -43,7 +45,12 @@ bool FilterIterator::next (Row & row)
 	for (;;)
 	{
 		if ( ! _input->next (row))  return false;
+				std::cout<<"FILTER"<<std::endl;
 
+		for(auto val:row.record) {
+			std::cout<<val<<" ";
+		}
+		std::cout<<std::endl;
 		++ _consumed;
 		if (_consumed % 2 != 0) // the fake filter predicate
 			break;
@@ -60,3 +67,16 @@ void FilterIterator::free (Row & row)
 	TRACE (true);
 	_input->free (row);
 } // FilterIterator::free
+
+
+/*
+filter iteraters over the rows until a valid row is found and then breaks, else
+keeps looping
+
+consumed++ everytime
+produced++ only when a valid row is found then return true;
+
+*/
+
+
+

@@ -57,3 +57,6 @@ void SortIterator::free (Row & row)
 {
 	TRACE (true);
 } // SortIterator::free
+
+
+// empid, age, salary, etc...

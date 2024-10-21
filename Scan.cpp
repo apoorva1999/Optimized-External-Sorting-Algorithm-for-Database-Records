@@ -38,6 +38,8 @@ ScanIterator::~ScanIterator()
 bool ScanIterator::next(Row &row)
 {
 	TRACE(true);
+	if (_count > _plan->_count)
+		return false;
 
 	if (_plan->_file.is_open())
 	{
@@ -46,24 +48,28 @@ bool ScanIterator::next(Row &row)
 			std::string str = _plan->_currentLine;
 			std::stringstream ss(str);
 			int num;
+			std::cout<<"SCAN"<<std::endl;
 			while (ss >> num)
 			{
+				std::cout<<num<<" ";
 				row.record.push_back(num);
 			}
+			std::cout<<std::endl;
+
+			
 		}
 
 		++_count;
-		return true; // Successfully read a line
+ // Successfully read a line
 	}
-	if (_count >= _plan->_count)
-		return false;
-
-	++_count;
+	
+	// ++_count;
 	return true;
 } // ScanIterator::next
 
 void ScanIterator::free(Row &row)
 {
+	row.record = std::vector<int>();
 	TRACE(true);
 } // ScanIterator::free
 
