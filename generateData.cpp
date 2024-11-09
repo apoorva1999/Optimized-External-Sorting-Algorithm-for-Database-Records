@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string.h>
 
+using namespace std;
 int main()
 {
     int min = 0;
@@ -11,21 +12,21 @@ int main()
     RowCount count = 1000;
     int cols = 10;
 
-    std::ofstream output_file("table.txt");
-    std::ostream_iterator<std::string> output_iterator(output_file, " ");
+    ofstream output_file("table.txt");
+    ostream_iterator<string> output_iterator(output_file, " ");
 
     for (int i = 0; i < count; i++)
     {
         Row row = Row(cols);
-        std::vector<std::string> arr;
+        vector<string> arr;
         for (int j = 0; j < cols; j++)
         {
             int num = rand() % range + min;
             row.record.push_back(num);
-            arr.push_back(std::to_string(num));
+            arr.push_back(to_string(num));
         }
-        std::copy(arr.begin(), arr.end(), output_iterator);
+        copy(arr.begin(), arr.end(), output_iterator);
         if (i != count - 1)
-            output_file << std::endl;
+            output_file << endl;
     }
 }

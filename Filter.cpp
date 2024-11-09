@@ -45,12 +45,12 @@ bool FilterIterator::next (Row & row)
 	for (;;)
 	{
 		if ( ! _input->next (row))  return false;
-				std::cout<<"FILTER"<<std::endl;
+				cout<<"FILTER"<<endl;
 
 		for(auto val:row.record) {
-			std::cout<<val<<" ";
+			cout<<val<<" ";
 		}
-		std::cout<<std::endl;
+		cout<<endl;
 		++ _consumed;
 		if (_consumed % 2 != 0) // the fake filter predicate
 			break;

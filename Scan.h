@@ -3,6 +3,8 @@
 #include <fstream>
 #include <string>
 
+using namespace std;
+
 class ScanPlan : public Plan
 {
 	friend class ScanIterator;
@@ -12,8 +14,8 @@ public:
 	Iterator * init () const;
 private:
 	RowCount const _count;
-	mutable std::ifstream _file;
-	mutable std::string _currentLine; 
+	mutable ifstream _file;
+	mutable string _currentLine; 
 }; // class ScanPlan
 
 class ScanIterator : public Iterator

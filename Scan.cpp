@@ -7,7 +7,7 @@ ScanPlan::ScanPlan(char const *const name, RowCount const count)
 	: Plan(name), _count(count), _file("table.txt")
 {
 
-	// std::ifstream file("table.txt");
+	// ifstream file("table.txt");
 	TRACE(true);
 } // ScanPlan::ScanPlan
 
@@ -43,18 +43,18 @@ bool ScanIterator::next(Row &row)
 
 	if (_plan->_file.is_open())
 	{
-		if (std::getline(_plan->_file, _plan->_currentLine))
+		if (getline(_plan->_file, _plan->_currentLine))
 		{
-			std::string str = _plan->_currentLine;
-			std::stringstream ss(str);
+			string str = _plan->_currentLine;
+			stringstream ss(str);
 			int num;
-			std::cout<<"SCAN"<<std::endl;
+			cout<<"SCAN"<<endl;
 			while (ss >> num)
 			{
-				std::cout<<num<<" ";
+				cout<<num<<" ";
 				row.record.push_back(num);
 			}
-			std::cout<<std::endl;
+			cout<<endl;
 
 			
 		}
@@ -69,7 +69,7 @@ bool ScanIterator::next(Row &row)
 
 void ScanIterator::free(Row &row)
 {
-	row.record = std::vector<int>();
+	row.record = vector<int>();
 	TRACE(true);
 } // ScanIterator::free
 

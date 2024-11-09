@@ -4,12 +4,12 @@
 #include<bits/stdc++.h>
 #define N 10
 typedef uint64_t RowCount;
-
+using namespace std;
 class Row
 {	
 public:
 	int size;
-	std::vector<int> record;
+	vector<int> record;
 	Row () ;
 	Row(int size);
 	virtual ~Row ();
