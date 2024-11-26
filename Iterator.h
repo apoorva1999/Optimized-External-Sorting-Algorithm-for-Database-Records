@@ -5,11 +5,13 @@
 #define N 10
 typedef uint64_t RowCount;
 using namespace std;
+
 class Row
 {	
 public:
 	int size;
 	vector<int> record;
+	int ovc;
 	Row () ;
 	Row(int size);
 	virtual ~Row ();
@@ -17,6 +19,15 @@ public:
 private:
 	// ...
 }; // class Row
+
+struct Page {
+	vector<Row> rows; // vector or linkedlist
+	int rowCount = 0;
+};
+struct Memory { 
+	vector<Page> buffer; // vector or linkedlist
+	int pageCount = 0;
+};
 
 class Plan
 {

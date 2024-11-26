@@ -1,0 +1,57 @@
+TODO
+
+- row()
+- generateData
+- scan
+
+
+
+
+
+Every plan has - 
+    datamember 
+    - plan* as input
+    - iterator* as init
+    methods 
+    - 
+
+Every iterator has
+    - Iterator* as input 
+    
+    methods
+    - next 
+    - free
+
+
+
+ScanPlan 
+    - _count = total number of rows
+    - name
+--------------
+WitnessIterator
+    - WitnessPlan as _plan
+    - ScanIterator as _input
+    - _rows = 0
+SortIterator
+    - produced 0
+    - consumed 0
+    - WitnessIterator as _input
+    - SortPlan as _plan
+    - starts next chain in its constructor
+
+FilterIterator
+    - produced 0
+    - consumed 0
+
+ScanIteraor
+    - _count = 0 (number of rows scanned currently)
+    - _plan = ScanPlan
+
+
+
+
+Witness -> Sort -> Witness -> Filter -> Scan
+
+init run 
+
+calls next of witness, which calls next of sort that it

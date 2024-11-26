@@ -8,7 +8,11 @@ typedef uint8_t byte;
 
 #define slotsof(a)	(sizeof (a) / sizeof (a[0]))
 
-#define nullptr	((void *) NULL)
+// 4kb
+
+
+#define PAGE_SIZE 5 // 5 records
+#define MEMORY_SIZE 5 //5 pages
 
 #define yesno(b)	((b) ? "yes" : "no")
 

@@ -1,7 +1,7 @@
-CPPOPT=-g -Og -D_DEBUG
+CPPOPT=-g -Og -D_DEBUG 	
 # -O2 -Os -Ofast
 # -fprofile-generate -fprofile-use
-CPPFLAGS=$(CPPOPT) -ansi -pedantic
+CPPFLAGS=$(CPPOPT) -ansi -pedantic -std=c++20 
 # -Wparentheses -Wno-unused-parameter -Wformat-security
 # -fno-rtti -std=c++11 -std=c++98
 
@@ -11,13 +11,13 @@ SCRS=
 
 # headers and code sources
 HDRS=	defs.h \
-		Iterator.h Scan.h Filter.h Sort.h Witness.h
+		Iterator.h Scan.h Filter.h Sort.h Witness.h TournamentTree.h
 SRCS=	defs.cpp Assert.cpp Test.cpp \
-		Iterator.cpp Scan.cpp Filter.cpp Sort.cpp Witness.cpp 
+		Iterator.cpp Scan.cpp Filter.cpp Sort.cpp Witness.cpp  TournamentTree.cpp
 
 # compilation targets
 OBJS=	defs.o Assert.o Test.o \
-		Iterator.o Scan.o Filter.o Sort.o Witness.o
+		Iterator.o Scan.o Filter.o Sort.o Witness.o TournamentTree.o
 
 # RCS assists
 REV=-q -f
