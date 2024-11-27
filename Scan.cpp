@@ -48,10 +48,10 @@ bool ScanIterator::next(Row &row)
 			string str = _plan->_currentLine;
 			stringstream ss(str);
 			int num;
-			cout<<"SCAN"<<endl;
+			// cout<<"SCAN"<<endl;
 			while (ss >> num)
 			{
-				cout<<num<<" ";
+				// cout<<num<<" ";
 				row.record.push_back(num);
 			}
 			cout<<endl;
@@ -63,7 +63,7 @@ bool ScanIterator::next(Row &row)
  // Successfully read a line
 	}
 	
-	// ++_count;
+	++_count;
 	return true;
 } // ScanIterator::next
 

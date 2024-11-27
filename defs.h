@@ -12,7 +12,7 @@ typedef uint8_t byte;
 
 
 #define PAGE_SIZE 5 // 5 records
-#define MEMORY_SIZE 5 //5 pages
+#define MEMORY_SIZE 3 //3 pages
 
 #define yesno(b)	((b) ? "yes" : "no")
 

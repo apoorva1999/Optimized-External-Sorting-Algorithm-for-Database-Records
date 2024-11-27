@@ -13,7 +13,7 @@ int main (int argc, char * argv [])
 				new SortPlan ("*** The main thing! ***",
 					new WitnessPlan ("input",
 						new FilterPlan ("half",
-							new ScanPlan ("source", 100)
+							new ScanPlan ("source", 42)
 						)
 					)
 				)
@@ -24,6 +24,6 @@ int main (int argc, char * argv [])
 	delete it;
 
 	delete plan;
-
+// 
 	return 0;
 } // main

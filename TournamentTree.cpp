@@ -72,13 +72,6 @@ void Tree:: generateRuns(Memory &memory) {
             for(auto row : page.rows) {
                 queue<Row>run;
                 run.push(row);
-                cout<<"--------"<<endl;
-                for(auto col: row.record) {
-                    cout<<col<<" ";
-                }
-                cout<<endl;
-                cout<<"--------"<<endl;
-
                 run.push(senitel_row); 
                 data.push_back(run);
             }
