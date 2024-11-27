@@ -13,5 +13,8 @@ class Tree {
     private:
     bool compare(queue<Row>&r1, queue<Row>&r2);
     void buildTree(int n, vector<queue<Row> > &data);
+    void replacementSelection(vector<queue<Row> > &data, int idx);
+    Row getWinner(vector<queue<Row> > &data) ;
+
 };
 

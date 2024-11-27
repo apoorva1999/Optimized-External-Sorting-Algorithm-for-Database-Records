@@ -58,7 +58,7 @@ void Tree::buildTree(int n, vector<queue<Row> > &data) {
         for(int i=leafn-1;i>0;i--) {
             int left_child = 2*i;
             int right_child = 2*i+1;
-            cout<<data[tree[left_child].wid].front().record[0]<<" "<<data[tree[right_child].wid].front().record[0]<<endl;
+            // cout<<data[tree[left_child].wid].front().record[0]<<" "<<data[tree[right_child].wid].front().record[0]<<endl;
 
             if(compare(data[tree[left_child].wid], data[tree[right_child].wid])) {
                 tree[i].lid = tree[right_child].wid;
@@ -69,20 +69,51 @@ void Tree::buildTree(int n, vector<queue<Row> > &data) {
             }
         }
 
-        for(int i=1;i<n;i++) {
-            cout<<"i: "<<i<<": ";
-            cout<<"lid: "<<tree[i].lid<<", ";
-            cout<<"wid: "<<tree[i].wid<<endl;
-        }
+        // for(int i=1;i<n;i++) {
+        //     cout<<"i: "<<i<<": ";
+        //     cout<<"lid: "<<tree[i].lid<<", ";
+        //     cout<<"wid: "<<tree[i].wid<<endl;
+        // }
 }
 
 void Tree::replacementSelection(vector<queue<Row> > &data, int idx) {
-    int j=0;
-    
+    int pidx = idx/2; // parent index
+    int leafn = data.size()/2;
+    int lidx = leafn + pidx; // leaf index
+    // cout<<"lidx: "<<lidx<<" idx: "<<idx<<endl;
+    if(compare(data[idx], data[tree[lidx].lid])) {
+        tree[lidx].wid = idx;
+        tree[lidx].lid = tree[lidx].lid;
+    } else {
+        tree[lidx].wid = tree[lidx].lid;
+        tree[lidx].lid = idx;
+    }
+
+    while(lidx > 1 ) {
+        pidx = lidx/2;
+        // cout<<"lidx: "<<lidx<<" pidx: "<<pidx<<endl;
+        if(compare(data[tree[lidx].wid], data[tree[pidx].lid])) {
+            tree[pidx].wid = tree[lidx].wid;
+            tree[pidx].lid = tree[pidx].lid;
+        } else {
+         tree[pidx].wid = tree[pidx].lid;
+         tree[pidx].lid = tree[lidx].wid;
+        }
+        lidx = pidx;
+    }
+
+    // cout<<"**********"<<endl;
+    //         for(int i=1;i<data.size();i++) {
+    //         cout<<"i: "<<i<<": ";
+    //         cout<<"lid: "<<tree[i].lid<<", ";
+    //         cout<<"wid: "<<tree[i].wid<<endl;
+    //     }
+    // cout<<"**********"<<endl;
 }
 
 Row Tree::getWinner(vector<queue<Row> > &data) {
-    int winnerIdx = tree[1].wid
+    int winnerIdx = tree[1].wid;
+    // cout<<"winnerIdx "<<winnerIdx<<endl;
     Row row = data[winnerIdx].front();
     data[winnerIdx].pop();
     replacementSelection(data, winnerIdx);
@@ -98,11 +129,11 @@ void Tree:: generateRuns(Memory &memory) {
         for(auto page : memory.buffer) {
             for(auto row : page.rows) {
                 queue<Row>run;
-                cout<<"row-> ";
-                for(auto r: row.record) {
-                    cout<<r<<" ";
-                }
-                cout<<endl;
+                // cout<<"row-> ";
+                // for(auto r: row.record) {
+                //     cout<<r<<" ";
+                // }
+                // cout<<endl;
                 run.push(row);
                 run.push(senitel_row); 
                 data.push_back(run);
