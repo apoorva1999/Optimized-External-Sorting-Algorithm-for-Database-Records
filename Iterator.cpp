@@ -2,7 +2,7 @@
 
 Row::Row ()
 {
-	TRACE (true);
+	// TRACE (true);
 } // Row::Row
 
 Row::Row(int size) {

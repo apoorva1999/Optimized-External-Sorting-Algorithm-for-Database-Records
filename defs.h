@@ -56,7 +56,7 @@ private :
 	int const _line;
 }; // class Trace
 
-#define TRACE(trace)	Trace __trace (trace, __FUNCTION__, __FILE__, __LINE__)
+#define TRACE(trace)	Trace __trace (!trace, __FUNCTION__, __FILE__, __LINE__)
 
 // -----------------------------------------------------------------
 

@@ -8,6 +8,7 @@ class Node {
 
 class Tree {
     public:
+    vector<Node> tree;
     void generateRuns(Memory &memory); 
     private:
     bool compare(queue<Row>&r1, queue<Row>&r2);
