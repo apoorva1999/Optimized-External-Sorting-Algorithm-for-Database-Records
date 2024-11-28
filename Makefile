@@ -1,4 +1,4 @@
-CPPOPT=-g -Og -D_DEBUG 	
+CPPOPT=-g -Og -D_DEBUG -O0
 # -O2 -Os -Ofast
 # -fprofile-generate -fprofile-use
 CPPFLAGS=$(CPPOPT) -ansi -pedantic -std=c++20 

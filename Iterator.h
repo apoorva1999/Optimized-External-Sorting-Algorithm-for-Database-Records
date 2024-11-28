@@ -11,7 +11,7 @@ class Row
 public:
 	int size;
 	vector<int> record;
-	int ovc;
+	int ovc = 0;
 	Row () ;
 	Row(int size);
 	virtual ~Row ();
