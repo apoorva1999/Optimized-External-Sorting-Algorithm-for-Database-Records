@@ -152,8 +152,8 @@ Row Tree::getWinner(vector<queue<Row> > &runs) {
 void Tree:: generateRuns(Memory &memory) {
         TRACE(true);
         vector<int> sentinel_record(1, INT_MAX);
-        Row senitel_row = Row(1); 
-        senitel_row.record = sentinel_record;
+        Row senitnelRow = Row(1); 
+        senitnelRow.record = sentinel_record;
         for(auto page : memory.buffer) {
             for(auto row : page.rows) {
                 queue<Row>run;
@@ -162,16 +162,16 @@ void Tree:: generateRuns(Memory &memory) {
                 }
                 cout<<endl;
                 run.push(row);
-                run.push(senitel_row); 
+                run.push(senitnelRow); 
                 runs.push_back(run);
             }
         }
         int m = runs.size();
-        int n = std::bit_ceil(runs.size());
+        int n = std::bit_ceil(runs.size()); //make #runs as power of 2
 
         while(runs.size()<n) {
             queue<Row>run;
-            run.push(senitel_row); 
+            run.push(senitnelRow); 
             runs.push_back(run);
         }
 
