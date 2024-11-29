@@ -22,4 +22,5 @@ private:
 	WitnessPlan const * const _plan;
 	Iterator * const _input;
 	RowCount _rows;
+	int _xor;
 }; // class WitnessIterator

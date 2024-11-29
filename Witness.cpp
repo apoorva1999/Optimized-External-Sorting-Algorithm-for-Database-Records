@@ -20,7 +20,7 @@ Iterator * WitnessPlan::init () const
 
 WitnessIterator::WitnessIterator (WitnessPlan const * const plan) :
 	_plan (plan), _input (plan->_input->init ()),
-	_rows (0)
+	_rows (0), _xor(0)
 {
 	TRACE (true);
 } // WitnessIterator::WitnessIterator
@@ -31,9 +31,9 @@ WitnessIterator::~WitnessIterator ()
 
 	delete _input;
 
-	traceprintf ("%s witnessed %lu rows\n",
+	traceprintf ("%s witnessed %lu rows with XOR %d\n ",
 			_plan->_name,
-			(unsigned long) (_rows));
+			(unsigned long) (_rows), _xor);
 } // WitnessIterator::~WitnessIterator
 
 bool WitnessIterator::next (Row & row)
@@ -42,6 +42,9 @@ bool WitnessIterator::next (Row & row)
 
 	if ( ! _input->next (row))  return false;
 	++ _rows;
+	for(auto col:row.record) {
+		_xor|=col;
+	}
 	return true;
 } // WitnessIterator::next
 

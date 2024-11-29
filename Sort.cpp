@@ -35,10 +35,10 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	Memory memory;
 	
 	for (Row row;  _input->next (row);  _input->free (row))	{
-		for(auto r: row.record) {
-			cout<<r<<" ";
-		}
-		cout<<endl;
+		// for(auto r: row.record) {
+		// 	cout<<r<<" ";
+		// }
+		// cout<<endl;
 
 		++ _consumed;
 		page.rowCount ++;
