@@ -33,12 +33,11 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 // SORT
 	Page page;
 	Memory memory;
-	
 	for (Row row;  _input->next (row);  _input->free (row))	{
-		// for(auto r: row.record) {
-		// 	cout<<r<<" ";
-		// }
-		// cout<<endl;
+		for(auto r: row.record) {
+			cout<<r<<" ";
+		}
+		cout<<endl;
 
 		++ _consumed;
 		page.rowCount ++;
@@ -64,6 +63,14 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 				memory.buffer = vector<Page>();
 			}
 		}
+	}
+	// When rows are not multiple of pageSize or memorySize
+	if(page.rows.size()>0) {
+		memory.buffer.push_back(page);
+		memory.pageCount++;
+	}
+	if(memory.buffer.size()>0) {
+		tree.generateRuns(memory);
 	}
 	delete _input;
 

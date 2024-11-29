@@ -151,16 +151,17 @@ Row Tree::getWinner(vector<queue<Row> > &runs) {
 
 void Tree:: generateRuns(Memory &memory) {
         TRACE(true);
+        runs = vector<queue<Row>>();
         vector<int> sentinel_record(1, INT_MAX);
         Row senitnelRow = Row(1); 
         senitnelRow.record = sentinel_record;
         for(auto page : memory.buffer) {
             for(auto row : page.rows) {
                 queue<Row>run;
-                for(auto r: row.record) {
-                    cout<<r<<" ";
-                }
-                cout<<endl;
+                // for(auto r: row.record) {
+                //     cout<<r<<" ";
+                // }
+                // cout<<endl;
                 run.push(row);
                 run.push(senitnelRow); 
                 runs.push_back(run);
