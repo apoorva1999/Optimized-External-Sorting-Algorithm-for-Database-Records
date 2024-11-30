@@ -11,13 +11,15 @@ SCRS=
 
 # headers and code sources
 HDRS=	defs.h \
-		Iterator.h Scan.h Filter.h Sort.h Witness.h TournamentTree.h
+		Iterator.h Scan.h Filter.h Sort.h Witness.h TournamentTree.h InternalSort.h Disk.h ExternalSort.h
 SRCS=	defs.cpp Assert.cpp Test.cpp \
-		Iterator.cpp Scan.cpp Filter.cpp Sort.cpp Witness.cpp  TournamentTree.cpp
+		Iterator.cpp Scan.cpp Filter.cpp Sort.cpp Witness.cpp  TournamentTree.cpp InternalSort.cpp Disk.cpp \
+		ExternalSort.cpp
 
 # compilation targets
 OBJS=	defs.o Assert.o Test.o \
-		Iterator.o Scan.o Filter.o Sort.o Witness.o TournamentTree.o
+		Iterator.o Scan.o Filter.o Sort.o Witness.o TournamentTree.o InternalSort.o Disk.o \
+		ExternalSort.o
 
 # RCS assists
 REV=-q -f

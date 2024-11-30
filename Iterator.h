@@ -25,8 +25,7 @@ struct Page {
 	int rowCount = 0;
 };
 struct Memory { 
-	vector<Page> buffer; // vector or linkedlist
-	int pageCount = 0;
+	static vector<Page> buffer; // vector or linkedlist
 };
 
 class Plan

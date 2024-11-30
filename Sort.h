@@ -1,5 +1,5 @@
 #include "Iterator.h"
-
+#include<queue>
 class SortPlan : public Plan
 {
 	friend class SortIterator;
@@ -7,6 +7,7 @@ public:
 	SortPlan (char const * const name, Plan * const input);
 	~SortPlan ();
 	Iterator * init () const;
+	static vector<queue<Row>>runs;
 private:
 	Plan * const _input;
 }; // class SortPlan

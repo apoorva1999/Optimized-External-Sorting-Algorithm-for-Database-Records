@@ -1,5 +1,6 @@
 #include "Iterator.h"
 
+vector<Page> Memory::buffer;
 Row::Row ()
 {
 	// TRACE (true);

@@ -3,11 +3,12 @@
 #include <queue> 
 #include<iostream>
 #include <bit>
-
+// #include"Disk.h"
+#include"Sort.h"
 
 using namespace std;
 
-vector<queue<Row>>runs;
+vector<Node> Tree::tree;
 
 int offset(int ovc) {
     return ovc>>24;
@@ -20,14 +21,14 @@ int value(int ovc) {
     //OVC and compare
 bool Tree::compare(int idx1, int idx2) {
         
-        Row& row1 = runs[idx1].front();
-        Row& row2 = runs[idx2].front();
+        Row& row1 = SortPlan::runs[idx1].front();
+        Row& row2 = SortPlan::runs[idx2].front();
         int n = row1.record.size();
         int col = 0;
         // cout<<"idx1 "<<idx1<<" idx2 "<<idx2<<endl;
         if(row1.ovc!=0 && row2.ovc!=0) {
-            cout<<"row1: ovc-> "<<row1.ovc<<" off->"<<offset(row1.ovc)<<" val->"<<value(row1.ovc)<<endl;
-            cout<<"row2: ovc-> "<<row2.ovc<<" off->"<<offset(row2.ovc)<<" val->"<<value(row2.ovc)<<endl;   
+            // cout<<"row1: ovc-> "<<row1.ovc<<" off->"<<offset(row1.ovc)<<" val->"<<value(row1.ovc)<<endl;
+            // cout<<"row2: ovc-> "<<row2.ovc<<" off->"<<offset(row2.ovc)<<" val->"<<value(row2.ovc)<<endl;   
 
             if(offset(row1.ovc) < offset(row2.ovc)) {
                 return false; // row1 has smaller offset than row2, therefore its bigger and loser
@@ -148,47 +149,4 @@ Row Tree::getWinner(vector<queue<Row> > &runs) {
     replacementSelection(runs, winnerIdx);
     return row;
 }
-
-void Tree:: generateRuns(Memory &memory) {
-        TRACE(true);
-        runs = vector<queue<Row>>();
-        vector<int> sentinel_record(1, INT_MAX);
-        Row senitnelRow = Row(1); 
-        senitnelRow.record = sentinel_record;
-        for(auto page : memory.buffer) {
-            for(auto row : page.rows) {
-                queue<Row>run;
-                // for(auto r: row.record) {
-                //     cout<<r<<" ";
-                // }
-                // cout<<endl;
-                run.push(row);
-                run.push(senitnelRow); 
-                runs.push_back(run);
-            }
-        }
-        int m = runs.size();
-        int n = std::bit_ceil(runs.size()); //make #runs as power of 2
-
-        while(runs.size()<n) {
-            queue<Row>run;
-            run.push(senitnelRow); 
-            runs.push_back(run);
-        }
-
-        buildTree(n, runs);
-
-        vector<Row>sortedRun;
-        while(sortedRun.size() < m) {
-            sortedRun.push_back(getWinner(runs));
-        }
-        cout<<"******************"<<endl;
-        for(auto row:sortedRun) {
-            for(auto col: row.record) {
-                cout<<col<<", ";
-            }
-            cout<<endl;
-        }
-}
-
-
+// void Tree::mergeSortedRuns() 

@@ -8,13 +8,16 @@ class Node {
 
 class Tree {
     public:
-    vector<Node> tree;
-    void generateRuns(Memory &memory); 
+    static vector<Node> tree;
+    static void generateRuns(); 
+    static void mergeSortedRuns();
+    static void buildTree(int n, vector<queue<Row> > &runs);
+    static Row getWinner(vector<queue<Row> > &runs) ;
+
     private:
-    bool compare(int i1, int i2);
-    void buildTree(int n, vector<queue<Row> > &runs);
-    void replacementSelection(vector<queue<Row> > &runs, int idx);
-    Row getWinner(vector<queue<Row> > &runs) ;
+    static bool compare(int i1, int i2);
+    static void replacementSelection(vector<queue<Row> > &runs, int idx);
+
 
 };
 

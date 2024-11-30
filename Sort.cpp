@@ -3,9 +3,10 @@
 #include "Iterator.h"
 #include "TournamentTree.h"
 #include <bit>
+#include "InternalSort.h"
 #include<iostream>
 
-
+vector<queue<Row>> SortPlan::runs;
 SortPlan::SortPlan (char const * const name, Plan * const input)
 	: Plan (name), _input (input)
 {
@@ -32,24 +33,23 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	TRACE (true);
 // SORT
 	Page page;
-	Memory memory;
+
 	for (Row row;  _input->next (row);  _input->free (row))	{
-		for(auto r: row.record) {
-			cout<<r<<" ";
-		}
-		cout<<endl;
+	// for(auto r: row.record) {
+	// 	cout<<r<<" ";
+	// }
+	// cout<<endl;
 
 		++ _consumed;
 		page.rowCount ++;
 		page.rows.push_back(row);
 		if(page.rowCount == PAGE_SIZE) {
 			TRACE(true);
-			memory.buffer.push_back(page);
-			memory.pageCount++;
+			Memory::buffer.push_back(page);
 			page.rowCount = 0;
 			page.rows = vector<Row>();
-			if(memory.pageCount == MEMORY_SIZE-1) {
-				tree.generateRuns(memory);
+			if(Memory::buffer.size() == MEMORY_SIZE) {
+				InternalSort::generateRuns();
 				// make initial runs
 				/*
 					P page size
@@ -59,18 +59,16 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 					TournamentTree.sort(memory) //stores initial sorted run of (M-1)*P records in disk
 					clear the memory
 				*/
-				memory.pageCount = 0;
-				memory.buffer = vector<Page>();
+				Memory::buffer = vector<Page>();
 			}
 		}
 	}
 	// When rows are not multiple of pageSize or memorySize
 	if(page.rows.size()>0) {
-		memory.buffer.push_back(page);
-		memory.pageCount++;
+		Memory::buffer.push_back(page);
 	}
-	if(memory.buffer.size()>0) {
-		tree.generateRuns(memory);
+	if(Memory::buffer.size()>0) {
+		InternalSort::generateRuns();
 	}
 	delete _input;
 
@@ -78,6 +76,9 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			_plan->_name,
 			(unsigned long) (_consumed));
 } // SortIterator::SortIterator
+
+
+
 
 SortIterator::~SortIterator ()
 {
