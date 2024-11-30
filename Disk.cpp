@@ -1,27 +1,28 @@
-#include"Disk.h"
+#include "Disk.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 int Disk::pidx = 0; // Definition and initialization
 
 void Disk::flushPage(string filename, Page &p) {
-    std::ofstream outfile;
-
-    if(pidx == 0)
-    outfile.open(filename);
-    else 
-    outfile.open(filename, std::ios::app);
+    ofstream outfile;
+    if (pidx == 0)
+        outfile.open(filename);
+    else
+        outfile.open(filename, std::ios::app);
     pidx++;
     if (!outfile.is_open()) {
         std::cerr << "Error: Could not open file " << filename << " for writing.\n";
         return;
     }
-     // Write each row's record to the file
+    // Write each row's record to the file
     for (const Row &row : p.rows) {
         std::ostringstream oss;
-        for (size_t i = 0; i < row.record.size(); ++i) {
+        for (size_t i = 0; i < row.record.size(); ++i)
+        {
             oss << row.record[i];
-            if (i < row.record.size() - 1) {
+            if (i < row.record.size() - 1)
+            {
                 oss << " "; // Add comma separator between record values
             }
         }
@@ -31,10 +32,33 @@ void Disk::flushPage(string filename, Page &p) {
     outfile.close();
     p.rows = vector<Row>();
     p.rowCount = 0;
-    std::cout << "Page flushed to file: " << filename << std::endl;
+}
 
-} 
+
 Page Disk::readPage(string filename, int pidx) {
+    ifstream infile(filename);
     Page p;
+    if (!infile.is_open()) {
+        std::cerr << "Error: Could not open file initial_run for reading.\n";
+        throw exception();
+    }
+
+    std::string line;
+    int startRow = pidx * PAGE_SIZE;
+    int currentRow = 0;
+    while (currentRow < startRow && std::getline(infile, line)) {
+        ++currentRow; 
+    }
+    while (p.rows.size() < PAGE_SIZE && std::getline(infile, line)) {
+        std::istringstream iss(line);
+        Row row;
+        std::string value;
+
+        while (std::getline(iss, value, ' ')) {
+            row.record.push_back(std::stoi(value));
+        }
+        p.rows.push_back(row);
+    }
+    infile.close();
     return p;
 }
