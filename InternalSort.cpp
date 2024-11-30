@@ -35,30 +35,16 @@ void InternalSort::generateRuns() {
 
     Tree::buildTree(n, SortPlan::runs);
     cout<<"******"<<endl;
-    vector<Row>sortedRun;
-    // while(sortedRun.size()<m) {
-    //      Row row = Tree::getWinner(SortPlan::runs);
-    //      for(auto r: row.record) {
-    //             cout<<r<<", ";
-    //     }
-    //     sortedRun.push_back(row);
-    //     cout<<endl;
-    // }
+
     Page outputPage;
     string file = "initial_runs";
     int cnt=0;
     while(cnt < m) {
         Row row = Tree::getWinner(SortPlan::runs);
         cnt++;
-           for(auto r: row.record) {
-                cout<<r<<", ";
-            }
-            cout<<endl;
         outputPage.rows.push_back(row);
-        // cout<<"before outputpage.rows.size "<<outputPage.rows.size()<<endl;
         if(outputPage.rows.size() == PAGE_SIZE) {
             Disk::flushPage(file, outputPage);
-        //  cout<<"after outputpage.rows.size "<<outputPage.rows.size()<<endl;
         }
     }
 }
