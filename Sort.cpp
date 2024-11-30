@@ -48,7 +48,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			Memory::buffer.push_back(page);
 			page.rowCount = 0;
 			page.rows = vector<Row>();
-			if(Memory::buffer.size() == MEMORY_SIZE) {
+			if(Memory::buffer.size() == MEMORY_SIZE-1) {
 				InternalSort::generateRuns();
 				// make initial runs
 				/*
