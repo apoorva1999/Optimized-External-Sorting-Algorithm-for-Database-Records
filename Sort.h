@@ -23,4 +23,7 @@ private:
 	SortPlan const * const _plan;
 	Iterator * const _input;
 	RowCount _consumed, _produced;
+	int _currentPageIndex;
+	int _currentRowIndex;
+	Page _currentPage;
 }; // class SortIterator

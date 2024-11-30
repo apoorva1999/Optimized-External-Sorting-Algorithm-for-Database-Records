@@ -5,6 +5,10 @@
 #include <bit>
 #include "InternalSort.h"
 #include<iostream>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include "Disk.h"
 
 vector<queue<Row>> SortPlan::runs;
 SortPlan::SortPlan (char const * const name, Plan * const input)
@@ -27,7 +31,7 @@ Iterator * SortPlan::init () const
 
 SortIterator::SortIterator (SortPlan const * const plan) :
 	_plan (plan), _input (plan->_input->init ()),
-	_consumed (0), _produced (0)
+	_consumed (0), _produced (0), _currentPageIndex(-1), _currentRowIndex(0)
 {
 	Tree tree;
 	TRACE (true);
@@ -91,15 +95,43 @@ SortIterator::~SortIterator ()
 			(unsigned long) (_consumed));
 } // SortIterator::~SortIterator
 
-bool SortIterator::next (Row & row)
-{
-	TRACE (true);
 
-	if (_produced >= _consumed)  return false;
+bool SortIterator::next(Row &row) {
+    TRACE(true);
 
-	++ _produced;
-	return true;
-} // SortIterator::next
+    if (_produced >= _consumed) {
+        return false;
+    }
+
+    if (_currentPageIndex == -1 || _currentRowIndex >= _currentPage.rows.size()) {
+        ++_currentPageIndex;
+        _currentPage = Disk::readPage("initial_runs", _currentPageIndex);
+        _currentRowIndex = 0;
+        if (_currentPage.rows.empty()) {
+            return false;
+        }
+    }
+
+    row = _currentPage.rows[_currentRowIndex];
+    ++_currentRowIndex;
+    ++_produced;
+    return true;
+}
+
+ // SortIterator::next
+
+// bool SortIterator::next(Row &row) {
+//     TRACE(true);
+
+//     // Return false if we've produced all available records
+//     if (_produced >= _consumed) {
+//         return false;
+//     }
+
+//     // Open the file for reading
+    
+// }
+
 
 void SortIterator::free (Row & row)
 {
