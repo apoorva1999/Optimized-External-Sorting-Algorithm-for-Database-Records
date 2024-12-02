@@ -39,11 +39,6 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	Page page;
 
 	for (Row row;  _input->next (row);  _input->free (row))	{
-	// for(auto r: row.record) {
-	// 	cout<<r<<" ";
-	// }
-	// cout<<endl;
-
 		++ _consumed;
 		page.rowCount ++;
 		page.rows.push_back(row);
@@ -82,8 +77,6 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 } // SortIterator::SortIterator
 
 
-
-
 SortIterator::~SortIterator ()
 {
 	TRACE (true);
@@ -117,21 +110,6 @@ bool SortIterator::next(Row &row) {
     ++_produced;
     return true;
 }
-
- // SortIterator::next
-
-// bool SortIterator::next(Row &row) {
-//     TRACE(true);
-
-//     // Return false if we've produced all available records
-//     if (_produced >= _consumed) {
-//         return false;
-//     }
-
-//     // Open the file for reading
-    
-// }
-
 
 void SortIterator::free (Row & row)
 {
