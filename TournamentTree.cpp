@@ -71,46 +71,55 @@ bool Tree::compare(int idx1, int idx2) {
         return true;
 }
     
-void Tree::buildTree(int n, vector<queue<Row> > &runs) {
-        tree = vector<Node>(n);
-        int leafn = n/2; //leafs is number of rows/2
-        for(int i=0;i<leafn;i++) {
-            int j = i+leafn;
-            int lefti = 2*i;
-            int righti = 2*i+1;
-            if(compare(lefti, righti)) {
-                    tree[j].lid = righti;
-                    tree[j].wid = lefti;
-            } 
-            else {
-                tree[j].lid = lefti;
-                tree[j].wid = righti;
-            }
-            
+void Tree::buildTree() {
+    vector<int> sentinel_record(1, INT_MAX);
+    Row senitnelRow = Row(1); 
+    senitnelRow.record = sentinel_record;
+    int n = std::bit_ceil(SortPlan::runs.size()); //make #runs as power of 2
+    while(SortPlan::runs.size()<n) {
+        queue<Row>run;
+        run.push(senitnelRow); 
+        SortPlan::runs.push_back(run);
+    }   
+    tree = vector<Node>(n);
+    int leafn = n/2; //leafs is number of rows/2
+    for(int i=0;i<leafn;i++) {
+        int j = i+leafn;
+        int lefti = 2*i;
+        int righti = 2*i+1;
+        if(compare(lefti, righti)) {
+                tree[j].lid = righti;
+                tree[j].wid = lefti;
+        } 
+        else {
+            tree[j].lid = lefti;
+            tree[j].wid = righti;
         }
-        for(int i=leafn-1;i>0;i--) {
-            int left_child = 2*i;
-            int right_child = 2*i+1;
-            // cout<<runs[tree[left_child].wid].front().record[0]<<" "<<runs[tree[right_child].wid].front().record[0]<<endl;
-            if(compare(tree[left_child].wid, tree[right_child].wid)) {
-                tree[i].lid = tree[right_child].wid;
-                tree[i].wid = tree[left_child].wid;
-            } else {
-                tree[i].lid = tree[left_child].wid;
-                tree[i].wid = tree[right_child].wid;
-            }
+        
+    }
+    for(int i=leafn-1;i>0;i--) {
+        int left_child = 2*i;
+        int right_child = 2*i+1;
+        // cout<<runs[tree[left_child].wid].front().record[0]<<" "<<runs[tree[right_child].wid].front().record[0]<<endl;
+        if(compare(tree[left_child].wid, tree[right_child].wid)) {
+            tree[i].lid = tree[right_child].wid;
+            tree[i].wid = tree[left_child].wid;
+        } else {
+            tree[i].lid = tree[left_child].wid;
+            tree[i].wid = tree[right_child].wid;
         }
+    }
 
-        // for(int i=1;i<n;i++) {
-        //     cout<<"i: "<<i<<": ";
-        //     cout<<"lid: "<<tree[i].lid<<", ";
-        //     cout<<"wid: "<<tree[i].wid<<endl;
-        // }
+    // for(int i=1;i<n;i++) {
+    //     cout<<"i: "<<i<<": ";
+    //     cout<<"lid: "<<tree[i].lid<<", ";
+    //     cout<<"wid: "<<tree[i].wid<<endl;
+    // }
 }
 
-void Tree::replacementSelection(vector<queue<Row> > &runs, int idx) {
+void Tree::replacementSelection(int idx) {
     int pidx = idx/2; // parent index
-    int leafn = runs.size()/2;
+    int leafn = SortPlan::runs.size()/2;
     int lidx = leafn + pidx; // leaf index
     // cout<<"lidx: "<<lidx<<" idx: "<<idx<<endl;
     if(compare(idx, tree[lidx].lid)) {
@@ -142,11 +151,11 @@ void Tree::replacementSelection(vector<queue<Row> > &runs, int idx) {
     // cout<<"**********"<<endl;
 }
 
-Row Tree::getWinner(vector<queue<Row> > &runs) {
+Row Tree::getWinner() {
     int winnerIdx = tree[1].wid;
-    Row row = runs[winnerIdx].front();
-    runs[winnerIdx].pop();
-    replacementSelection(runs, winnerIdx);
+    Row row = SortPlan::runs[winnerIdx].front();
+    SortPlan::runs[winnerIdx].pop();
+    replacementSelection(winnerIdx);
     return row;
 }
 // void Tree::mergeSortedRuns() 

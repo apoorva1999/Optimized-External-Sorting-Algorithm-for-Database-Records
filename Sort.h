@@ -19,6 +19,8 @@ public:
 	~SortIterator ();
 	bool next (Row & row);
 	void free (Row & row);
+	static int runSize;
+
 private:
 	SortPlan const * const _plan;
 	Iterator * const _input;

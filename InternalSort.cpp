@@ -25,22 +25,14 @@ void InternalSort::generateRuns() {
         }
     }
     int m = SortPlan::runs.size();
-    int n = std::bit_ceil(SortPlan::runs.size()); //make #runs as power of 2
-
-    while(SortPlan::runs.size()<n) {
-        queue<Row>run;
-        run.push(senitnelRow); 
-        SortPlan::runs.push_back(run);
-    }
-
-    Tree::buildTree(n, SortPlan::runs);
+    SortIterator::runSize = (m+MEMORY_SIZE)/(MEMORY_SIZE-1);
+    Tree::buildTree();
     cout<<"******"<<endl;
-
-    Page outputPage;
+    Page outputPage; // take it from memory
     string file = "initial_runs";
     int cnt=0;
     while(cnt < m) {
-        Row row = Tree::getWinner(SortPlan::runs);
+        Row row = Tree::getWinner();
         cnt++;
         outputPage.rows.push_back(row);
         if(outputPage.rows.size() == PAGE_SIZE) {
