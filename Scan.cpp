@@ -60,6 +60,7 @@ bool ScanIterator::next(Row &row)
 		}
 
 		++_count;
+		return true;
  // Successfully read a line
 	}
 	
