@@ -10,9 +10,10 @@
 #include <sstream>
 #include "Disk.h"
 #include <filesystem>
+#include "ExternalSort.h"
 
 vector<queue<Row>> SortPlan::runs;
-string SortPlan::phase_0_dirname = "phase_0";
+string SortPlan::pass_0_dirname = "pass_0";
 int SortIterator::runSize = 0;
 
 SortPlan::SortPlan (char const * const name, Plan * const input)
@@ -41,10 +42,10 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	TRACE (true);
 // SORT
 	Page page;
-	if (filesystem::exists(SortPlan::phase_0_dirname)) {
-        std::cout << "Directory already exists: " << SortPlan:: phase_0_dirname << std::endl;
-    } else if(!filesystem::create_directory(SortPlan::phase_0_dirname)) {
-		cerr<<"Couldn't create directory "<<SortPlan::phase_0_dirname<<endl;
+	if (filesystem::exists(SortPlan::pass_0_dirname)) {
+        std::cout << "Directory already exists: " << SortPlan:: pass_0_dirname << std::endl;
+    } else if(!filesystem::create_directory(SortPlan::pass_0_dirname)) {
+		cerr<<"Couldn't create directory "<<SortPlan::pass_0_dirname<<endl;
 		return;//TODO: handle
 	}
 	for (Row row;  _input->next (row);  _input->free (row))	{
@@ -57,8 +58,6 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			page.rowCount = 0;
 			page.rows = vector<Row>();
 			if(Memory::buffer.size() == MEMORY_SIZE-1) {
-				cout<<"runNumber: "<<InternalSort::runNumber<<endl;
-
 				InternalSort::generateRuns();
 				// make initial runs
 				/*
@@ -73,17 +72,27 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			}
 		}
 	}
+	ExternalSort::totalRunsToMerge = InternalSort::runNumber;
+	while(ExternalSort::totalRunsToMerge > 1) {
+		int totalRunsToGenerate = (ExternalSort::totalRunsToMerge + MEMORY_SIZE-2)/(MEMORY_SIZE-1);
+		int currentRunsGenerated = 0;
+		while(currentRunsGenerated < totalRunsToGenerate) {
+				ExternalSort::mergeSortedRuns();
+				ExternalSort::currentRunNumber++;
+				currentRunsGenerated++;
+		}
+		ExternalSort::totalRunsToMerge = totalRunsToGenerate;
+		ExternalSort::currentPassNumber++;
+	}
+
 	// When rows are not multiple of pageSize or memorySize
 	if(page.rows.size()>0) {
 		Memory::buffer.push_back(page);
 	}
 	if(Memory::buffer.size()>0) {
-		cout<<"left?"<<endl;
-				cout<<"runNumber: "<<InternalSort::runNumber<<endl;
-
 		InternalSort::generateRuns();
-
 	}
+
 	delete _input;
 
 	traceprintf ("%s consumed %lu rows\n",

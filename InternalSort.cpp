@@ -32,7 +32,7 @@ void InternalSort::generateRuns() {
     cout<<"******"<<endl;
     Page outputPage; // take it from memory
     string filename= "run_" + to_string(runNumber);
-    string filePath = SortPlan::phase_0_dirname+"/"+filename;
+    string filePath = SortPlan::pass_0_dirname+"/"+filename;
     int pidx = 0;
     int cnt=0;
     while(cnt < m) {

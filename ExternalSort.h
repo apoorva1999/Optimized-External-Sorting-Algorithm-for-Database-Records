@@ -3,7 +3,13 @@
 using namespace std;
 
 class ExternalSort {
-    static int passNumber;
-    void mergeSortedRuns(string filename, int pidx);
-    
+    public:
+    static int currentPassNumber;
+    static int oldRunNumber;
+    static int currentRunNumber;
+    static int totalRunsToMerge;
+    static vector<int> inputPageIdx;
+    static int currentRecords;
+    static int totalRecords;
+    static void mergeSortedRuns();
 };

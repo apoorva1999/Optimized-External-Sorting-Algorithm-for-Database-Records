@@ -38,7 +38,7 @@ Page Disk::readPage(string filename, int pidx) {
     ifstream infile(filename);
     Page p;
     if (!infile.is_open()) {
-        std::cerr << "Error: Could not open file initial_run for reading.\n";
+        std::cerr << "Error: Could not open file "<<filename<<" for reading"<<endl;
         throw exception();
     }
 

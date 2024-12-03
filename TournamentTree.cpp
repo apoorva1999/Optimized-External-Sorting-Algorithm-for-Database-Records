@@ -4,11 +4,12 @@
 #include<iostream>
 #include <bit>
 #include"Disk.h"
+#include "ExternalSort.h"
 #include"Sort.h"
 
 using namespace std;
 
-vector<int>currentPageIndex;
+// vector<int>currentPageIndex;
 vector<Node> Tree::tree;
 
 int offset(int ovc) {
@@ -74,7 +75,7 @@ bool Tree::compare(int idx1, int idx2) {
     
 void Tree::buildTree() {
     int totalRuns = MEMORY_SIZE-1;
-    currentPageIndex = vector<int>(totalRuns,0);
+    ExternalSort::inputPageIdx = vector<int>(totalRuns, 1);
     vector<int> sentinel_record(1, INT_MAX);
     Row senitnelRow = Row(1); 
     senitnelRow.record = sentinel_record;
@@ -161,11 +162,13 @@ Row Tree::getWinner() {
 
     if(SortPlan::runs[winnerIdx].empty() && row.record[0]!=INT_MAX) {
         // if(SortPlan::runs[winnerIdx].front().record[0] == INT_MAX) ;
-        string filename = "run_" + to_string(winnerIdx);
-        int nextPageIdx = currentPageIndex[winnerIdx];
+        string filename = "pass_" + to_string(ExternalSort::currentPassNumber-1) + "/run_" + to_string(ExternalSort::oldRunNumber + winnerIdx);
+        int nextPageIdx = ExternalSort::inputPageIdx[winnerIdx];
+        ExternalSort::inputPageIdx[winnerIdx]++;
         Page page = Disk::readPage(filename, nextPageIdx);
         queue<Row>run;
         for(auto row : page.rows) { 
+            ExternalSort::totalRecords++;
             run.push(row);
         }
         SortPlan::runs[winnerIdx] = run;

@@ -8,7 +8,7 @@ public:
 	~SortPlan ();
 	Iterator * init () const;
 	static vector<queue<Row>>runs;
-	static string phase_0_dirname;
+	static string pass_0_dirname;
 private:
 	Plan * const _input;
 }; // class SortPlan

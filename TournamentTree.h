@@ -17,7 +17,5 @@ class Tree {
     private:
     static bool compare(int i1, int i2);
     static void replacementSelection(int idx);
-
-
 };
 
