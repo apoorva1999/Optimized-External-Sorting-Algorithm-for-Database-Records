@@ -2,9 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-int Disk::pidx = 0; // Definition and initialization
+// int Disk::pidx = 0; // Definition and initialization
 
-void Disk::flushPage(string filename, Page &p) {
+void Disk::flushPage(string filename, Page &p, int &pidx) {
     ofstream outfile;
     if (pidx == 0)
         outfile.open(filename);

@@ -9,8 +9,12 @@
 #include <fstream>
 #include <sstream>
 #include "Disk.h"
+#include <filesystem>
 
 vector<queue<Row>> SortPlan::runs;
+string SortPlan::phase_0_dirname = "phase_0";
+int SortIterator::runSize = 0;
+
 SortPlan::SortPlan (char const * const name, Plan * const input)
 	: Plan (name), _input (input)
 {
@@ -30,14 +34,19 @@ Iterator * SortPlan::init () const
 } // SortPlan::init
 
 SortIterator::SortIterator (SortPlan const * const plan) :
-	_plan (plan), _input (plan->_input->init ()),
+	_plan (plan), _input (plan->_input->init ()),	
 	_consumed (0), _produced (0), _currentPageIndex(-1), _currentRowIndex(0)
 {
 	Tree tree;
 	TRACE (true);
 // SORT
 	Page page;
-
+	if (filesystem::exists(SortPlan::phase_0_dirname)) {
+        std::cout << "Directory already exists: " << SortPlan:: phase_0_dirname << std::endl;
+    } else if(!filesystem::create_directory(SortPlan::phase_0_dirname)) {
+		cerr<<"Couldn't create directory "<<SortPlan::phase_0_dirname<<endl;
+		return;//TODO: handle
+	}
 	for (Row row;  _input->next (row);  _input->free (row))	{
 		++ _consumed;
 		page.rowCount ++;
@@ -48,6 +57,8 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			page.rowCount = 0;
 			page.rows = vector<Row>();
 			if(Memory::buffer.size() == MEMORY_SIZE-1) {
+				cout<<"runNumber: "<<InternalSort::runNumber<<endl;
+
 				InternalSort::generateRuns();
 				// make initial runs
 				/*
@@ -67,7 +78,11 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		Memory::buffer.push_back(page);
 	}
 	if(Memory::buffer.size()>0) {
+		cout<<"left?"<<endl;
+				cout<<"runNumber: "<<InternalSort::runNumber<<endl;
+
 		InternalSort::generateRuns();
+
 	}
 	delete _input;
 
@@ -96,17 +111,17 @@ bool SortIterator::next(Row &row) {
         return false;
     }
 
-    if (_currentPageIndex == -1 || _currentRowIndex >= _currentPage.rows.size()) {
-        ++_currentPageIndex;
-        _currentPage = Disk::readPage("initial_runs", _currentPageIndex);
-        _currentRowIndex = 0;
-        if (_currentPage.rows.empty()) {
-            return false;
-        }
-    }
+    // if (_currentPageIndex == -1 || _currentRowIndex >= _currentPage.rows.size()) {
+    //     ++_currentPageIndex;
+    //     _currentPage = Disk::readPage("initial_runs", _currentPageIndex);
+    //     _currentRowIndex = 0;
+    //     if (_currentPage.rows.empty()) {
+    //         return false;
+    //     }
+    // }
 
-    row = _currentPage.rows[_currentRowIndex];
-    ++_currentRowIndex;
+    // row = _currentPage.rows[_currentRowIndex];
+    // ++_currentRowIndex;
     ++_produced;
     return true;
 }

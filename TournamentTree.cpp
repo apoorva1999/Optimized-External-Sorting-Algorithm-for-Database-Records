@@ -3,11 +3,12 @@
 #include <queue> 
 #include<iostream>
 #include <bit>
-// #include"Disk.h"
+#include"Disk.h"
 #include"Sort.h"
 
 using namespace std;
 
+vector<int>currentPageIndex;
 vector<Node> Tree::tree;
 
 int offset(int ovc) {
@@ -72,6 +73,8 @@ bool Tree::compare(int idx1, int idx2) {
 }
     
 void Tree::buildTree() {
+    int totalRuns = MEMORY_SIZE-1;
+    currentPageIndex = vector<int>(totalRuns,0);
     vector<int> sentinel_record(1, INT_MAX);
     Row senitnelRow = Row(1); 
     senitnelRow.record = sentinel_record;
@@ -155,6 +158,18 @@ Row Tree::getWinner() {
     int winnerIdx = tree[1].wid;
     Row row = SortPlan::runs[winnerIdx].front();
     SortPlan::runs[winnerIdx].pop();
+
+    if(SortPlan::runs[winnerIdx].empty() && row.record[0]!=INT_MAX) {
+        // if(SortPlan::runs[winnerIdx].front().record[0] == INT_MAX) ;
+        string filename = "run_" + to_string(winnerIdx);
+        int nextPageIdx = currentPageIndex[winnerIdx];
+        Page page = Disk::readPage(filename, nextPageIdx);
+        queue<Row>run;
+        for(auto row : page.rows) { 
+            run.push(row);
+        }
+        SortPlan::runs[winnerIdx] = run;
+    }
     replacementSelection(winnerIdx);
     return row;
 }

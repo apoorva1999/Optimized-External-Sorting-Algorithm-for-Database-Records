@@ -5,5 +5,6 @@ using namespace std;
 
 class InternalSort {
     public:
+    static int runNumber;
     static void generateRuns();
 };
