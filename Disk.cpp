@@ -2,6 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
 // int Disk::pidx = 0; // Definition and initialization
 
 void Disk::flushPage(string filename, Page &p, int &pidx) {
@@ -34,7 +38,29 @@ void Disk::flushPage(string filename, Page &p, int &pidx) {
 }
 
 
+void Disk::deleteDirectories(const fs::path& directoryPath, const std::string& pattern) {
+         try {
+        // Iterate over all entries in the directory
+        for (const auto& entry : fs::directory_iterator(directoryPath)) {
+            // Check if the entry is a directory
+            if (fs::is_directory(entry)) {
+                // Get the directory name
+                const std::string dirName = entry.path().filename().string();
+                
+                // Check if the directory name matches the pattern
+                if (dirName.find(pattern) == 0) { // Name starts with "pass_"
+                    std::cout << "Deleting directory: " << entry.path() << std::endl;
+                    fs::remove_all(entry); // Recursively delete the directory
+                }
+            }
+        }
+    } catch (const fs::filesystem_error& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+}
+
 Page Disk::readPage(string filename, int pidx) {
+    cout<<"*******"<<endl;
     ifstream infile(filename);
     Page p;
     if (!infile.is_open()) {
@@ -56,8 +82,15 @@ Page Disk::readPage(string filename, int pidx) {
         while (std::getline(iss, value, ' ')) {
             row.record.push_back(std::stoi(value));
         }
+        for(auto v:row.record) {
+            cout<<v<<" ";
+        }
+        cout<<endl;
         p.rows.push_back(row);
     }
+
+    cout<<"*******"<<endl;
+
     infile.close();
     return p;
 }

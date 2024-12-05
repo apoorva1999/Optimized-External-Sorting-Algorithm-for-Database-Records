@@ -6,6 +6,7 @@
 #include<bits/stdc++.h>
 #include "TournamentTree.h"
 #include<filesystem>
+#include<iostream>
 using namespace std;
 
 
@@ -18,7 +19,7 @@ int ExternalSort::totalRunsToMerge = InternalSort::runNumber;
 vector<int> ExternalSort::inputPageIdx = vector<int>(MEMORY_SIZE-1,0);
 
 void ExternalSort::mergeSortedRuns() {
-
+    cout<<"EXTERNAL SORT"<<endl;
     int totalRunNumber = MEMORY_SIZE-1;
     Memory::buffer = vector<Page>(MEMORY_SIZE);
     int oldPassNumber = currentPassNumber-1;
@@ -56,9 +57,9 @@ void ExternalSort::mergeSortedRuns() {
 
     string outputDir = "pass_" + to_string(currentPassNumber);
     if (filesystem::exists(outputDir)) {
-        std::cout << "Directory already exists: " << outputDir << std::endl;
+       cout<< "Directory already exists: " << outputDir << std::endl;
     } else if(!filesystem::create_directory(outputDir)) {
-		cerr<<"Couldn't create directory "<<outputDir<<endl;
+		cout<<"Couldn't create directory "<<outputDir<<endl;
 		return;//TODO: handle
 	}
     string outputFilePath = outputDir + "/run_" + to_string(currentRunNumber);

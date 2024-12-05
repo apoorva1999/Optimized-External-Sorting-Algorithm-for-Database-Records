@@ -3,9 +3,18 @@
 #include "Filter.h"
 #include "Sort.h"
 #include "Witness.h"
+#include "Disk.h"
+
+
+void cleanup() {
+	std::filesystem::path targetDirectory = "./"; // Change to your target directory
+    std::string pattern = "pass_";
+	Disk::deleteDirectories(targetDirectory,pattern);
+}
 
 int main (int argc, char * argv [])
 {
+	cleanup();
 	TRACE (true);
 
 	Plan * const plan =
@@ -13,7 +22,7 @@ int main (int argc, char * argv [])
 				new SortPlan ("*** The main thing! ***",
 					new WitnessPlan ("input",
 						new FilterPlan ("half",
-							new ScanPlan ("source",200)
+							new ScanPlan ("source",50)
 						)
 					)
 				)
