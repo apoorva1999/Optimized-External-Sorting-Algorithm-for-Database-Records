@@ -12,6 +12,8 @@ using namespace std;
 // vector<int>currentPageIndex;
 vector<Node> Tree::tree;
 
+Row sentinelRow;
+
 int offset(int ovc) {
     return ovc>>24;
 }
@@ -76,13 +78,13 @@ bool Tree::compare(int idx1, int idx2) {
 void Tree::buildTree() {
     int totalRuns = MEMORY_SIZE-1;
     ExternalSort::inputPageIdx = vector<int>(totalRuns, 1);
-    vector<int> sentinel_record(1, INT_MAX);
-    Row senitnelRow = Row(1); 
-    senitnelRow.record = sentinel_record;
+    vector<int>sentinel_record (1, INT_MAX);
+    sentinelRow = Row(1); 
+    sentinelRow.record = sentinel_record;
     int n = std::bit_ceil(SortPlan::runs.size()); //make #runs as power of 2
     while(SortPlan::runs.size()<n) {
         queue<Row>run;
-        run.push(senitnelRow); 
+        run.push(sentinelRow); 
         SortPlan::runs.push_back(run);
     }   
     tree = vector<Node>(n);
@@ -171,6 +173,8 @@ Row Tree::getWinner() {
             ExternalSort::totalRecords++;
             run.push(row);
         }
+        
+        if(run.empty())  run.push(sentinelRow);
         SortPlan::runs[winnerIdx] = run;
     }
     replacementSelection(winnerIdx);

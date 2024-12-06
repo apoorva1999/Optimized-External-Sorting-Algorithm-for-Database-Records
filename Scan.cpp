@@ -54,7 +54,7 @@ bool ScanIterator::next(Row &row)
 				// cout<<num<<" ";
 				row.record.push_back(num);
 			}
-			cout<<endl;
+			// cout<<endl;
 
 			
 		}

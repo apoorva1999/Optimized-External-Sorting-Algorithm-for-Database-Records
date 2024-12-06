@@ -60,7 +60,6 @@ void Disk::deleteDirectories(const fs::path& directoryPath, const std::string& p
 }
 
 Page Disk::readPage(string filename, int pidx) {
-    cout<<"*******"<<endl;
     ifstream infile(filename);
     Page p;
     if (!infile.is_open()) {
@@ -82,14 +81,8 @@ Page Disk::readPage(string filename, int pidx) {
         while (std::getline(iss, value, ' ')) {
             row.record.push_back(std::stoi(value));
         }
-        for(auto v:row.record) {
-            cout<<v<<" ";
-        }
-        cout<<endl;
         p.rows.push_back(row);
     }
-
-    cout<<"*******"<<endl;
 
     infile.close();
     return p;

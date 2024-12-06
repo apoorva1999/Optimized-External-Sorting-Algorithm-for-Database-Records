@@ -17,10 +17,10 @@ void InternalSort::generateRuns() {
     for(auto page : Memory::buffer) {
         for(auto row : page.rows) {
             queue<Row>run;
-            for(auto r: row.record) {
-                cout<<r<<", ";
-            }
-            cout<<endl;
+            // for(auto r: row.record) {
+            //     cout<<r<<", ";
+            // }
+            // cout<<endl;
             run.push(row);
             run.push(senitnelRow); 
             SortPlan::runs.push_back(run);
@@ -29,7 +29,7 @@ void InternalSort::generateRuns() {
     int m = SortPlan::runs.size();
     SortIterator::runSize = (m+MEMORY_SIZE)/(MEMORY_SIZE-1);
     Tree::buildTree();
-    cout<<"******"<<endl;
+    // cout<<"******"<<endl;
     Page outputPage; // take it from memory
     string filename= "run_" + to_string(runNumber);
     string filePath = SortPlan::pass_0_dirname+"/"+filename;

@@ -72,6 +72,15 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			}
 		}
 	}
+	// // When rows are not multiple of pageSize or memorySize
+	if(page.rows.size()>0) {
+		Memory::buffer.push_back(page);
+	}
+	if(Memory::buffer.size()>0) {
+		InternalSort::generateRuns();
+	}
+
+
 	ExternalSort::totalRunsToMerge = InternalSort::runNumber;
 	while(ExternalSort::totalRunsToMerge > 1) {
 		int totalRunsToGenerate = (ExternalSort::totalRunsToMerge + MEMORY_SIZE-2)/(MEMORY_SIZE-1);
@@ -83,15 +92,10 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		}
 		ExternalSort::totalRunsToMerge = totalRunsToGenerate;
 		ExternalSort::currentPassNumber++;
+		ExternalSort::oldRunNumber = 0;
+		ExternalSort::currentRunNumber = 0;
 	}
 
-	// When rows are not multiple of pageSize or memorySize
-	if(page.rows.size()>0) {
-		Memory::buffer.push_back(page);
-	}
-	if(Memory::buffer.size()>0) {
-		InternalSort::generateRuns();
-	}
 
 	delete _input;
 

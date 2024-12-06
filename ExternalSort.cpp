@@ -20,18 +20,18 @@ vector<int> ExternalSort::inputPageIdx = vector<int>(MEMORY_SIZE-1,0);
 
 void ExternalSort::mergeSortedRuns() {
     cout<<"EXTERNAL SORT"<<endl;
-    int totalRunNumber = MEMORY_SIZE-1;
+    int totalRunNumber = std::min(MEMORY_SIZE-1, totalRunsToMerge - oldRunNumber);
     Memory::buffer = vector<Page>(MEMORY_SIZE);
     int oldPassNumber = currentPassNumber-1;
-    string inputFilePath = "pass_" + to_string(oldPassNumber) + "/";
+//    ;
     for(int i=oldRunNumber; i<oldRunNumber + totalRunNumber; i++) {
-        inputFilePath += "run_" + to_string(i);
+        // inputFilePath += "run_" + to_string(i);
+        string inputFilePath = "pass_" + to_string(oldPassNumber) + "/" +  "run_" + to_string(i);
         if(filesystem::exists(inputFilePath)) {
             Page page = Disk::readPage(inputFilePath, 0); //check that file exist
-             Memory::buffer[i] = page;
+             Memory::buffer[i-oldRunNumber] = page;
         }
     }
-    oldRunNumber+=totalRunNumber;
 
     /// Infinity row
     vector<int> sentinel_record(1, INT_MAX);
@@ -41,7 +41,8 @@ void ExternalSort::mergeSortedRuns() {
 
 
     SortPlan::runs = vector<queue<Row>>();
-    int totalRecords = 0;
+    totalRecords = 0;
+    currentRecords = 0;
     for(auto page : Memory::buffer) {
         queue<Row>run;
         for(auto row : page.rows) { 
@@ -78,4 +79,6 @@ void ExternalSort::mergeSortedRuns() {
         Disk::flushPage(outputFilePath, outputPage, pidx);
     }
     SortIterator::runSize = SortIterator::runSize*(MEMORY_SIZE-1);
+    oldRunNumber+=totalRunNumber;
+
 }
