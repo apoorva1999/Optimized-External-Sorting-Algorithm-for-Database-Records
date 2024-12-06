@@ -1,0 +1,7 @@
+764_slides/*
+.vscode
+*.o
+run*
+Test.exe
+table.txt
+generateData.exe
