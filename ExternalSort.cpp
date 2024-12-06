@@ -17,28 +17,45 @@ int ExternalSort::currentRecords = 0;
 int ExternalSort::totalRecords = 0;
 int ExternalSort::totalRunsToMerge = InternalSort::runNumber;
 vector<int> ExternalSort::inputPageIdx = vector<int>(MEMORY_SIZE-1,0);
+Row senitnelRow = Row(1);
 
-void ExternalSort::mergeSortedRuns() {
-    cout<<"EXTERNAL SORT"<<endl;
-    int totalRunNumber = std::min(MEMORY_SIZE-1, totalRunsToMerge - oldRunNumber);
+string getFilePath(int passNumber, int runNumber) {
+    return "pass_" + to_string(passNumber) + "/" + "run_" + to_string(runNumber);
+}
+
+void ExternalSort::mergeSortedRuns(vector<RunMetadata>&runsToMergeMetadata) {
     Memory::buffer = vector<Page>(MEMORY_SIZE);
-    int oldPassNumber = currentPassNumber-1;
-//    ;
-    for(int i=oldRunNumber; i<oldRunNumber + totalRunNumber; i++) {
-        // inputFilePath += "run_" + to_string(i);
-        string inputFilePath = "pass_" + to_string(oldPassNumber) + "/" +  "run_" + to_string(i);
+    for(int i=0;i<runsToMergeMetadata.size();i++) {
+        RunMetadata runMetadata = runsToMergeMetadata[i];
+        int passNumber = runMetadata.passNumber;
+        int runNumber = runMetadata.runNumber;
+
+        string inputFilePath = getFilePath(passNumber, runNumber);
         if(filesystem::exists(inputFilePath)) {
             Page page = Disk::readPage(inputFilePath, 0); //check that file exist
-             Memory::buffer[i-oldRunNumber] = page;
+             Memory::buffer[i] = page;
         }
     }
+}
 
+
+void ExternalSort::mergeSortedRuns() {
     /// Infinity row
-    vector<int> sentinel_record(1, INT_MAX);
-    Row senitnelRow = Row(1); 
-    senitnelRow.record = sentinel_record;
+     senitnelRow.record =  vector<int>(1, INT_MAX);
     //////
-
+    cout<<"EXTERNAL SORT"<<endl;
+//     int totalRunNumber = std::min(MEMORY_SIZE-1, totalRunsToMerge - oldRunNumber);
+//     Memory::buffer = vector<Page>(MEMORY_SIZE);
+//     int oldPassNumber = currentPassNumber-1;
+// //    ;
+//     for(int i=oldRunNumber; i<oldRunNumber + totalRunNumber; i++) {
+//         // inputFilePath += "run_" + to_string(i);
+//         string inputFilePath = "pass_" + to_string(oldPassNumber) + "/" +  "run_" + to_string(i);
+//         if(filesystem::exists(inputFilePath)) {
+//             Page page = Disk::readPage(inputFilePath, 0); //check that file exist
+//              Memory::buffer[i-oldRunNumber] = page;
+//         }
+//     }
 
     SortPlan::runs = vector<queue<Row>>();
     totalRecords = 0;
@@ -78,7 +95,6 @@ void ExternalSort::mergeSortedRuns() {
     if(outputPage.rows.size()) {
         Disk::flushPage(outputFilePath, outputPage, pidx);
     }
-    SortIterator::runSize = SortIterator::runSize*(MEMORY_SIZE-1);
     oldRunNumber+=totalRunNumber;
 
 }

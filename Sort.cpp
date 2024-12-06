@@ -14,8 +14,10 @@
 
 vector<queue<Row>> SortPlan::runs;
 string SortPlan::pass_0_dirname = "pass_0";
-int SortIterator::runSize = 0;
-
+priority_queue<RunMetadata> SortPlan::runPriority;
+int initialRunsToMerge() {
+	return (InternalSort::runNumber-2)%(FAN_IN-1)+2;
+}
 SortPlan::SortPlan (char const * const name, Plan * const input)
 	: Plan (name), _input (input)
 {
@@ -80,7 +82,22 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		InternalSort::generateRuns();
 	}
 
+	///////////////
+	int initialRuns = initialRunsToMerge();
 
+
+	int cnt = 0;
+	vector<RunMetadata>runsToMergeMetadata;
+	while(cnt<initialRuns) {
+		RunMetadata runMetadata = SortPlan::runPriority.top();
+		SortPlan::runPriority.pop();
+		runsToMergeMetadata.push_back(runMetadata);
+		cnt++;
+	}
+	
+	
+
+	
 	ExternalSort::totalRunsToMerge = InternalSort::runNumber;
 	while(ExternalSort::totalRunsToMerge > 1) {
 		int totalRunsToGenerate = (ExternalSort::totalRunsToMerge + MEMORY_SIZE-2)/(MEMORY_SIZE-1);

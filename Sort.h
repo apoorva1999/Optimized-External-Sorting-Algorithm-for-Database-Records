@@ -1,5 +1,16 @@
 #include "Iterator.h"
 #include<queue>
+
+class RunMetadata {
+	public:
+	int totalPages;
+	int runNumber;
+	int passNumber;
+
+	bool operator<(const RunMetadata& other) const {
+        return totalPages > other.totalPages;
+    }
+};
 class SortPlan : public Plan
 {
 	friend class SortIterator;
@@ -9,6 +20,7 @@ public:
 	Iterator * init () const;
 	static vector<queue<Row>>runs;
 	static string pass_0_dirname;
+	static priority_queue<RunMetadata> runPriority;
 private:
 	Plan * const _input;
 }; // class SortPlan
@@ -20,8 +32,6 @@ public:
 	~SortIterator ();
 	bool next (Row & row);
 	void free (Row & row);
-	static int runSize;
-
 private:
 	SortPlan const * const _plan;
 	Iterator * const _input;

@@ -26,8 +26,12 @@ void InternalSort::generateRuns() {
             SortPlan::runs.push_back(run);
         }
     }
-    int m = SortPlan::runs.size();
-    SortIterator::runSize = (m+MEMORY_SIZE)/(MEMORY_SIZE-1);
+
+    /*
+        TotalPages = Ceil(totalRecords/pageSize)
+    */
+    int totalRecords = SortPlan::runs.size();
+    int totalPages = (int)ceil(totalRecords/PAGE_SIZE);
     Tree::buildTree();
     // cout<<"******"<<endl;
     Page outputPage; // take it from memory
@@ -35,13 +39,14 @@ void InternalSort::generateRuns() {
     string filePath = SortPlan::pass_0_dirname+"/"+filename;
     int pidx = 0;
     int cnt=0;
-    while(cnt < m) {
+    SortPlan::runPriority.push({totalPages, runNumber, 0});
+    while(cnt < totalRecords) {
         Row row = Tree::getWinner();
         cnt++;
         outputPage.rows.push_back(row);
         if(outputPage.rows.size() == PAGE_SIZE) {
             Disk::flushPage(filePath, outputPage, pidx);
-        }
+        }   
     }
 
      if(outputPage.rows.size() >0) {
