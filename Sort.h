@@ -21,6 +21,7 @@ public:
 	static vector<queue<Row>>runs;
 	static string pass_0_dirname;
 	static priority_queue<RunMetadata> runPriority;
+	static vector<RunMetadata>runsToMergeMetadata;
 private:
 	Plan * const _input;
 }; // class SortPlan

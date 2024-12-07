@@ -15,6 +15,7 @@
 vector<queue<Row>> SortPlan::runs;
 string SortPlan::pass_0_dirname = "pass_0";
 priority_queue<RunMetadata> SortPlan::runPriority;
+vector<RunMetadata> SortPlan::runsToMergeMetadata = vector<RunMetadata>();
 int initialRunsToMerge() {
 	return (InternalSort::runNumber-2)%(FAN_IN-1)+2;
 }
@@ -87,27 +88,50 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 
 
 	int cnt = 0;
-	vector<RunMetadata>runsToMergeMetadata;
+	
 	while(cnt<initialRuns) {
 		RunMetadata runMetadata = SortPlan::runPriority.top();
 		SortPlan::runPriority.pop();
-		runsToMergeMetadata.push_back(runMetadata);
+		SortPlan::runsToMergeMetadata.push_back(runMetadata);
 		cnt++;
 	}
 	
-	
-
-	
-	ExternalSort::totalRunsToMerge = InternalSort::runNumber;
-	while(ExternalSort::totalRunsToMerge > 1) {
-		int totalRunsToGenerate = (ExternalSort::totalRunsToMerge + MEMORY_SIZE-2)/(MEMORY_SIZE-1);
-		int currentRunsGenerated = 0;
+		
+	ExternalSort::currentRunsToMerge = InternalSort::runNumber;
+	while(ExternalSort::currentRunsToMerge > 1) {
+		int totalRunsToGenerate;
+		if(ExternalSort::currentPassNumber == 1) {
+			totalRunsToGenerate = 1;
+		} else {
+			totalRunsToGenerate = SortPlan::runPriority.size()/FAN_IN;
+			{
+				while(cnt<FAN_IN && SortPlan::runPriority.size()) {
+					RunMetadata runMetadata = SortPlan::runPriority.top();
+					SortPlan::runPriority.pop();
+					SortPlan::runsToMergeMetadata.push_back(runMetadata);
+					cnt++;
+			}}
+		}
+        		
+		int currentRunsGenerated = 0; //not required- we can use currentRunNumber
 		while(currentRunsGenerated < totalRunsToGenerate) {
-				ExternalSort::mergeSortedRuns();
+				ExternalSort::mergeSortedRuns(SortPlan::runsToMergeMetadata);
 				ExternalSort::currentRunNumber++;
 				currentRunsGenerated++;
+				cnt=0;
+				SortPlan::runsToMergeMetadata = vector<RunMetadata>();
+				
+				if(currentRunsGenerated<totalRunsToGenerate)
+				{
+					while(cnt<FAN_IN && SortPlan::runPriority.size()) {
+						RunMetadata runMetadata = SortPlan::runPriority.top();
+						SortPlan::runPriority.pop();
+						SortPlan::runsToMergeMetadata.push_back(runMetadata);
+						cnt++;
+				}}
+				
 		}
-		ExternalSort::totalRunsToMerge = totalRunsToGenerate;
+		ExternalSort::currentRunsToMerge = SortPlan::runPriority.size();
 		ExternalSort::currentPassNumber++;
 		ExternalSort::oldRunNumber = 0;
 		ExternalSort::currentRunNumber = 0;

@@ -11,8 +11,9 @@ typedef uint8_t byte;
 // 4kb
 
 
-#define PAGE_SIZE 4 // 5 records
-#define MEMORY_SIZE 4 //3 pages
+#define PAGE_SIZE 3 // 5 records
+#define MEMORY_SIZE 3 //3 pages
+#define FAN_IN (MEMORY_SIZE-1)
 
 #define yesno(b)	((b) ? "yes" : "no")
 

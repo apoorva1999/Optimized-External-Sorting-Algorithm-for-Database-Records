@@ -161,10 +161,12 @@ Row Tree::getWinner() {
     int winnerIdx = tree[1].wid;
     Row row = SortPlan::runs[winnerIdx].front();
     SortPlan::runs[winnerIdx].pop();
-
+  
     if(SortPlan::runs[winnerIdx].empty() && row.record[0]!=INT_MAX) {
+          int runNumber = SortPlan::runsToMergeMetadata[winnerIdx].runNumber;
+          int passNumber = SortPlan::runsToMergeMetadata[winnerIdx].passNumber;
         // if(SortPlan::runs[winnerIdx].front().record[0] == INT_MAX) ;
-        string filename = "pass_" + to_string(ExternalSort::currentPassNumber-1) + "/run_" + to_string(ExternalSort::oldRunNumber + winnerIdx);
+        string filename = "pass_" + to_string(passNumber) + "/run_" + to_string(runNumber);
         int nextPageIdx = ExternalSort::inputPageIdx[winnerIdx];
         ExternalSort::inputPageIdx[winnerIdx]++;
         Page page = Disk::readPage(filename, nextPageIdx);

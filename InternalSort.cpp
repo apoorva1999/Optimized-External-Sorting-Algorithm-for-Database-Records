@@ -31,7 +31,7 @@ void InternalSort::generateRuns() {
         TotalPages = Ceil(totalRecords/pageSize)
     */
     int totalRecords = SortPlan::runs.size();
-    int totalPages = (int)ceil(totalRecords/PAGE_SIZE);
+    int totalPages = (int)ceil((double)totalRecords/PAGE_SIZE);
     Tree::buildTree();
     // cout<<"******"<<endl;
     Page outputPage; // take it from memory

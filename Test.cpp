@@ -22,7 +22,7 @@ int main (int argc, char * argv [])
 				new SortPlan ("*** The main thing! ***",
 					new WitnessPlan ("input",
 						new FilterPlan ("half",
-							new ScanPlan ("source",100)
+							new ScanPlan ("source",130)
 						)
 					)
 				)

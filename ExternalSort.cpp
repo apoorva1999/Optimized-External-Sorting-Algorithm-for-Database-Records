@@ -15,7 +15,7 @@ int ExternalSort::oldRunNumber = 0;
 int ExternalSort::currentRunNumber = 0;
 int ExternalSort::currentRecords = 0;
 int ExternalSort::totalRecords = 0;
-int ExternalSort::totalRunsToMerge = InternalSort::runNumber;
+int ExternalSort::currentRunsToMerge = InternalSort::runNumber;
 vector<int> ExternalSort::inputPageIdx = vector<int>(MEMORY_SIZE-1,0);
 Row senitnelRow = Row(1);
 
@@ -36,26 +36,13 @@ void ExternalSort::mergeSortedRuns(vector<RunMetadata>&runsToMergeMetadata) {
              Memory::buffer[i] = page;
         }
     }
+    mergeSortedRuns();
 }
 
 
 void ExternalSort::mergeSortedRuns() {
     /// Infinity row
      senitnelRow.record =  vector<int>(1, INT_MAX);
-    //////
-    cout<<"EXTERNAL SORT"<<endl;
-//     int totalRunNumber = std::min(MEMORY_SIZE-1, totalRunsToMerge - oldRunNumber);
-//     Memory::buffer = vector<Page>(MEMORY_SIZE);
-//     int oldPassNumber = currentPassNumber-1;
-// //    ;
-//     for(int i=oldRunNumber; i<oldRunNumber + totalRunNumber; i++) {
-//         // inputFilePath += "run_" + to_string(i);
-//         string inputFilePath = "pass_" + to_string(oldPassNumber) + "/" +  "run_" + to_string(i);
-//         if(filesystem::exists(inputFilePath)) {
-//             Page page = Disk::readPage(inputFilePath, 0); //check that file exist
-//              Memory::buffer[i-oldRunNumber] = page;
-//         }
-//     }
 
     SortPlan::runs = vector<queue<Row>>();
     totalRecords = 0;
@@ -78,7 +65,7 @@ void ExternalSort::mergeSortedRuns() {
        cout<< "Directory already exists: " << outputDir << std::endl;
     } else if(!filesystem::create_directory(outputDir)) {
 		cout<<"Couldn't create directory "<<outputDir<<endl;
-		return;//TODO: handle
+		return;
 	}
     string outputFilePath = outputDir + "/run_" + to_string(currentRunNumber);
 
@@ -95,6 +82,8 @@ void ExternalSort::mergeSortedRuns() {
     if(outputPage.rows.size()) {
         Disk::flushPage(outputFilePath, outputPage, pidx);
     }
-    oldRunNumber+=totalRunNumber;
 
+    int numberOfPagesInCurrentRun = (int)ceil((double)totalRecords/PAGE_SIZE);
+    cout<<ExternalSort::currentPassNumber<<endl;
+    SortPlan::runPriority.push({numberOfPagesInCurrentRun, currentRunNumber, currentPassNumber});
 }
