@@ -98,30 +98,28 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	
 		
 	ExternalSort::currentRunsToMerge = InternalSort::runNumber;
+
 	while(ExternalSort::currentRunsToMerge > 1) {
 		int totalRunsToGenerate;
 		if(ExternalSort::currentPassNumber == 1) {
-			totalRunsToGenerate = 1;
+			totalRunsToGenerate = 1; // Graceful degradation
 		} else {
-			totalRunsToGenerate = SortPlan::runPriority.size()/FAN_IN;
-			{
-				while(cnt<FAN_IN && SortPlan::runPriority.size()) {
-					RunMetadata runMetadata = SortPlan::runPriority.top();
-					SortPlan::runPriority.pop();
-					SortPlan::runsToMergeMetadata.push_back(runMetadata);
-					cnt++;
-			}}
+			totalRunsToGenerate = ExternalSort::currentRunsToMerge/FAN_IN;
+			while(cnt<FAN_IN && SortPlan::runPriority.size()) {
+				RunMetadata runMetadata = SortPlan::runPriority.top();
+				SortPlan::runPriority.pop();
+				SortPlan::runsToMergeMetadata.push_back(runMetadata);
+				cnt++;
+			}
 		}
         		
-		int currentRunsGenerated = 0; //not required- we can use currentRunNumber
-		while(currentRunsGenerated < totalRunsToGenerate) {
+		while(ExternalSort::currentRunNumber < totalRunsToGenerate) {
 				ExternalSort::mergeSortedRuns(SortPlan::runsToMergeMetadata);
 				ExternalSort::currentRunNumber++;
-				currentRunsGenerated++;
 				cnt=0;
 				SortPlan::runsToMergeMetadata = vector<RunMetadata>();
 				
-				if(currentRunsGenerated<totalRunsToGenerate)
+				if(ExternalSort::currentRunNumber<totalRunsToGenerate)
 				{
 					while(cnt<FAN_IN && SortPlan::runPriority.size()) {
 						RunMetadata runMetadata = SortPlan::runPriority.top();
