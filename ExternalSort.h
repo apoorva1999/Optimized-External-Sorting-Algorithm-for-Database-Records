@@ -14,5 +14,4 @@ class ExternalSort {
     static int currentRecords;
     static int totalRecords;
     static void mergeSortedRuns();
-    static void mergeSortedRuns(vector<RunMetadata>&runsToMergeMetadata);
 };

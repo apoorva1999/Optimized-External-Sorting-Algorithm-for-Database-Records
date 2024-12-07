@@ -118,7 +118,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		}
         		
 		while(ExternalSort::currentRunNumber < totalRunsToGenerate) {
-				ExternalSort::mergeSortedRuns(SortPlan::runsToMergeMetadata);
+				ExternalSort::mergeSortedRuns();
 				ExternalSort::currentRunNumber++;
 				SortPlan::runsToMergeMetadata = vector<RunMetadata>();
 				if(ExternalSort::currentRunNumber<totalRunsToGenerate)

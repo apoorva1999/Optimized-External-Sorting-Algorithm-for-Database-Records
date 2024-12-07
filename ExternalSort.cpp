@@ -22,10 +22,10 @@ string getFilePath(int passNumber, int runNumber) {
     return "pass_" + to_string(passNumber) + "/" + "run_" + to_string(runNumber);
 }
 
-void ExternalSort::mergeSortedRuns(vector<RunMetadata>&runsToMergeMetadata) {
+void fillMemoryWithRuns() {
     Memory::buffer = vector<Page>(MEMORY_SIZE);
-    for(int i=0;i<runsToMergeMetadata.size();i++) {
-        RunMetadata runMetadata = runsToMergeMetadata[i];
+    for(int i=0;i<SortPlan::runsToMergeMetadata.size();i++) {
+        RunMetadata runMetadata = SortPlan::runsToMergeMetadata[i];
         int passNumber = runMetadata.passNumber;
         int runNumber = runMetadata.runNumber;
 
@@ -35,11 +35,11 @@ void ExternalSort::mergeSortedRuns(vector<RunMetadata>&runsToMergeMetadata) {
              Memory::buffer[i] = page;
         }
     }
-    mergeSortedRuns();
 }
 
 
 void ExternalSort::mergeSortedRuns() {
+    fillMemoryWithRuns();
     /// Infinity row
      senitnelRow.record =  vector<int>(1, INT_MAX);
 
