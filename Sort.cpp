@@ -106,7 +106,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	
 	ExternalSort::currentRunsToMerge = InternalSort::runNumber;
 
-	while(ExternalSort::currentRunsToMerge > 1) {
+	while(ExternalSort::currentRunsToMerge > FAN_IN) {
 		int totalRunsToGenerate;
 		if(ExternalSort::currentPassNumber == 1) {
 			totalRunsToGenerate = 1; 
@@ -131,6 +131,8 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		ExternalSort::currentRunNumber = 0;
 	}
 
+	getSmallestRunsMetadataToMerge(FAN_IN);
+	ExternalSort::mergeLastRun();
 
 	delete _input;
 
@@ -158,7 +160,12 @@ bool SortIterator::next(Row &row) {
     if (_produced >= _consumed) {
         return false;
     }
-
+	
+	row = Tree::getWinner();
+	for(auto c: row.record) {
+		cout<<c<<" ";
+	}
+	cout<<endl;
     // if (_currentPageIndex == -1 || _currentRowIndex >= _currentPage.rows.size()) {
     //     ++_currentPageIndex;
     //     _currentPage = Disk::readPage("initial_runs", _currentPageIndex);

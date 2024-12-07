@@ -16,7 +16,6 @@ int ExternalSort::currentRecords = 0;
 int ExternalSort::totalRecords = 0;
 int ExternalSort::currentRunsToMerge = InternalSort::runNumber;
 vector<int> ExternalSort::inputPageIdx = vector<int>(MEMORY_SIZE-1,0);
-Row senitnelRow = Row(1);
 
 string getFilePath(int passNumber, int runNumber) {
     return "pass_" + to_string(passNumber) + "/" + "run_" + to_string(runNumber);
@@ -37,24 +36,26 @@ void fillMemoryWithRuns() {
     }
 }
 
-
-void ExternalSort::mergeSortedRuns() {
-    fillMemoryWithRuns();
-    /// Infinity row
-     senitnelRow.record =  vector<int>(1, INT_MAX);
-
+void createRunsFromMemory() {
     SortPlan::runs = vector<queue<Row>>();
-    totalRecords = 0;
-    currentRecords = 0;
+    ExternalSort::totalRecords = 0;
+    ExternalSort::currentRecords = 0;
     for(auto page : Memory::buffer) {
         queue<Row>run;
         for(auto row : page.rows) { 
             run.push(row);
-            totalRecords++;
+            ExternalSort::totalRecords++;
         }
         if(run.size())
         SortPlan::runs.push_back(run);
     }
+}
+
+
+void ExternalSort::mergeSortedRuns() {
+    
+    fillMemoryWithRuns();
+    createRunsFromMemory();
     Tree::buildTree();
 
     Page outputPage;
@@ -84,4 +85,11 @@ void ExternalSort::mergeSortedRuns() {
 
     int numberOfPagesInCurrentRun = (int)ceil((double)totalRecords/PAGE_SIZE);
     SortPlan::runPriority.push({numberOfPagesInCurrentRun, currentRunNumber, currentPassNumber});
+}
+
+void ExternalSort::mergeLastRun() {
+
+    fillMemoryWithRuns();
+    createRunsFromMemory();
+    Tree::buildTree();
 }
