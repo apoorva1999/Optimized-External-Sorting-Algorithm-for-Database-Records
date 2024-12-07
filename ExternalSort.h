@@ -8,7 +8,6 @@ class RunMetadata;
 class ExternalSort {
     public:
     static int currentPassNumber;
-    static int oldRunNumber;
     static int currentRunNumber;
     static int currentRunsToMerge;
     static vector<int> inputPageIdx;

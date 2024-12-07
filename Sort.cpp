@@ -16,9 +16,23 @@ vector<queue<Row>> SortPlan::runs;
 string SortPlan::pass_0_dirname = "pass_0";
 priority_queue<RunMetadata> SortPlan::runPriority;
 vector<RunMetadata> SortPlan::runsToMergeMetadata = vector<RunMetadata>();
-int initialRunsToMerge() {
+int getInitialRunsToMerge() {
 	return (InternalSort::runNumber-2)%(FAN_IN-1)+2;
 }
+
+void getSmallestRunsMetadataToMerge(int totalRunstoMerge)
+{
+	int cnt=0;
+    while (cnt < totalRunstoMerge && SortPlan::runPriority.size())
+    {
+        RunMetadata runMetadata = SortPlan::runPriority.top();
+        SortPlan::runPriority.pop();
+        SortPlan::runsToMergeMetadata.push_back(runMetadata);
+        cnt++;
+    }
+}
+
+
 SortPlan::SortPlan (char const * const name, Plan * const input)
 	: Plan (name), _input (input)
 {
@@ -83,55 +97,37 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		InternalSort::generateRuns();
 	}
 
-	///////////////
-	int initialRuns = initialRunsToMerge();
 
+////////////////////////////////////////////////////////////////////////////////////
 
-	int cnt = 0;
+					// EXTERNAL SORT //
+
+////////////////////////////////////////////////////////////////////////////////////
 	
-	while(cnt<initialRuns) {
-		RunMetadata runMetadata = SortPlan::runPriority.top();
-		SortPlan::runPriority.pop();
-		SortPlan::runsToMergeMetadata.push_back(runMetadata);
-		cnt++;
-	}
-	
-		
 	ExternalSort::currentRunsToMerge = InternalSort::runNumber;
 
 	while(ExternalSort::currentRunsToMerge > 1) {
 		int totalRunsToGenerate;
 		if(ExternalSort::currentPassNumber == 1) {
-			totalRunsToGenerate = 1; // Graceful degradation
+			totalRunsToGenerate = 1; 
+			int initialRuns = getInitialRunsToMerge();  // Graceful degradation
+			getSmallestRunsMetadataToMerge(initialRuns);
 		} else {
 			totalRunsToGenerate = ExternalSort::currentRunsToMerge/FAN_IN;
-			while(cnt<FAN_IN && SortPlan::runPriority.size()) {
-				RunMetadata runMetadata = SortPlan::runPriority.top();
-				SortPlan::runPriority.pop();
-				SortPlan::runsToMergeMetadata.push_back(runMetadata);
-				cnt++;
-			}
+			getSmallestRunsMetadataToMerge(FAN_IN);
 		}
         		
 		while(ExternalSort::currentRunNumber < totalRunsToGenerate) {
 				ExternalSort::mergeSortedRuns(SortPlan::runsToMergeMetadata);
 				ExternalSort::currentRunNumber++;
-				cnt=0;
 				SortPlan::runsToMergeMetadata = vector<RunMetadata>();
-				
 				if(ExternalSort::currentRunNumber<totalRunsToGenerate)
 				{
-					while(cnt<FAN_IN && SortPlan::runPriority.size()) {
-						RunMetadata runMetadata = SortPlan::runPriority.top();
-						SortPlan::runPriority.pop();
-						SortPlan::runsToMergeMetadata.push_back(runMetadata);
-						cnt++;
-				}}
-				
+                    getSmallestRunsMetadataToMerge(FAN_IN);
+                }	
 		}
 		ExternalSort::currentRunsToMerge = SortPlan::runPriority.size();
 		ExternalSort::currentPassNumber++;
-		ExternalSort::oldRunNumber = 0;
 		ExternalSort::currentRunNumber = 0;
 	}
 

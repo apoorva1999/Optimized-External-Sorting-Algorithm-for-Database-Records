@@ -11,7 +11,6 @@ using namespace std;
 
 
 int ExternalSort::currentPassNumber = 1;
-int ExternalSort::oldRunNumber = 0;
 int ExternalSort::currentRunNumber = 0;
 int ExternalSort::currentRecords = 0;
 int ExternalSort::totalRecords = 0;
@@ -84,6 +83,5 @@ void ExternalSort::mergeSortedRuns() {
     }
 
     int numberOfPagesInCurrentRun = (int)ceil((double)totalRecords/PAGE_SIZE);
-    cout<<ExternalSort::currentPassNumber<<endl;
     SortPlan::runPriority.push({numberOfPagesInCurrentRun, currentRunNumber, currentPassNumber});
 }

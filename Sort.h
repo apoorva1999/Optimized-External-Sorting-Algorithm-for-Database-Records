@@ -29,7 +29,7 @@ private:
 class SortIterator : public Iterator
 {
 public:
-	SortIterator (SortPlan const * const plan);
+	SortIterator (SortPlan const *const plan);
 	~SortIterator ();
 	bool next (Row & row);
 	void free (Row & row);
