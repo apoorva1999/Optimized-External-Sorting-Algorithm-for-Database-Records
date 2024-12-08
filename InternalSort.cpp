@@ -8,11 +8,26 @@
 #include"Sort.h"
 
 int InternalSort::runNumber = 0;
+Row senitnelRow;
+
+
+void generateCacheSizeRuns(vector<queue<Row>>&cacheSizeRuns, int &cnt) {
+    queue<Row> cacheSizeRun;
+    Tree::buildTree();
+    while(cacheSizeRun.size() < cnt) { 
+        Row row = Tree::getWinner();
+        cacheSizeRun.push(row);
+    }
+    cacheSizeRun.push(senitnelRow);
+    cacheSizeRuns.push_back(cacheSizeRun);
+    SortPlan::runs = vector<queue<Row>>();
+    cnt = 0;
+}
+
 void InternalSort::generateRuns() {
     TRACE(true);
     SortPlan::runs = vector<queue<Row>>();
     vector<int> sentinel_record(1, INT_MAX);
-    Row senitnelRow = Row(); 
     senitnelRow.record = sentinel_record;
     int cnt = 0;
     vector<queue<Row>>cacheSizeRuns;
@@ -28,38 +43,15 @@ void InternalSort::generateRuns() {
             SortPlan::runs.push_back(run);
             cnt++;
             if(cnt == CACHE_SIZE) {
-                    Tree::buildTree();
-                    while(cacheSizeRun.size() < CACHE_SIZE) { 
-                        Row row = Tree::getWinner();
-                        cacheSizeRun.push(row);
-                    }
-                    cacheSizeRun.push(senitnelRow);
-                    cacheSizeRuns.push_back(cacheSizeRun);
-                    cnt = 0;
-                    SortPlan::runs = vector<queue<Row>>();
-                    cacheSizeRun = queue<Row>();
+                  generateCacheSizeRuns(cacheSizeRuns, cnt);
             }
         }
     }
     if(cnt > 0) {
-        Tree::buildTree();
-        while(cacheSizeRun.size() < cnt) 
-        { 
-            Row row = Tree::getWinner();
-            cacheSizeRun.push(row);
-        }
-        cacheSizeRun.push(senitnelRow);
-        cacheSizeRuns.push_back(cacheSizeRun);
-        cnt = 0;
+        generateCacheSizeRuns(cacheSizeRuns, cnt);
     }
-    // int totalRecords = 0;
-    // SortPlan::runs = vector<queue<Row>>();  
-    // for(auto &page : Memory::buffer) {
-    //     queue<Row>run;
-    //     for(auto row : page.rows) {
-    //          run.push(row);
-    //          totalRecords++;
-    //     }CACHE_SIZE
+
+    //Merge cache size mini runs
     SortPlan::runs = cacheSizeRuns;
     int totalPages = (int)ceil((double)totalRecords/PAGE_SIZE);
     Tree::buildTree();
