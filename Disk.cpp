@@ -23,6 +23,7 @@ void Disk::flushPage(string filename, Page &p, int &pidx) {
         std::ostringstream oss;
         for (size_t i = 0; i < row.record.size(); ++i)
         {
+            // cout<<row.record[i]<<"rowwww ";
             oss << row.record[i];
             if (i < row.record.size() - 1)
             {

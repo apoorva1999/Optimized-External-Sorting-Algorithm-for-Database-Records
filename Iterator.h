@@ -9,7 +9,6 @@ using namespace std;
 class Row
 {	
 public:
-	int size;
 	vector<int> record;
 	int ovc = 0;
 	Row () ;

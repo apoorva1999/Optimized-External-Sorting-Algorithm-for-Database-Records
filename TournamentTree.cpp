@@ -79,7 +79,7 @@ void Tree::buildTree() {
     int totalRuns = MEMORY_SIZE-1;
     ExternalSort::inputPageIdx = vector<int>(totalRuns, 1);
     vector<int>sentinel_record (1, INT_MAX);
-    sentinelRow = Row(1); 
+    sentinelRow = Row(); 
     sentinelRow.record = sentinel_record;
     int n = std::bit_ceil(SortPlan::runs.size()); //make #runs as power of 2
     while(SortPlan::runs.size()<n) {

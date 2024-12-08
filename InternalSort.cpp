@@ -12,48 +12,62 @@ void InternalSort::generateRuns() {
     TRACE(true);
     SortPlan::runs = vector<queue<Row>>();
     vector<int> sentinel_record(1, INT_MAX);
-    Row senitnelRow = Row(1); 
+    Row senitnelRow = Row(); 
     senitnelRow.record = sentinel_record;
+    int cnt = 0;
+    vector<queue<Row>>cacheSizeRuns;
+    queue<Row>cacheSizeRun;
+    int totalRecords = 0;
     for(auto &page : Memory::buffer) {
-        SortPlan::runs = vector<queue<Row>>();
+        
         for(auto row : page.rows) {
+            totalRecords++;
             queue<Row>run;
             run.push(row);
             run.push(senitnelRow); 
             SortPlan::runs.push_back(run);
-        }
-        //cache size mini runs
-        page.rows = vector<Row>();
-        int totalRecords = SortPlan::runs.size();
-
-        Tree::buildTree();
-        int cnt=0;
-        while(cnt < totalRecords) {
-            Row row = Tree::getWinner();
             cnt++;
-            page.rows.push_back(row);
+            if(cnt == CACHE_SIZE) {
+                    Tree::buildTree();
+                    while(cacheSizeRun.size() < CACHE_SIZE) { 
+                        Row row = Tree::getWinner();
+                        cacheSizeRun.push(row);
+                    }
+                    cacheSizeRun.push(senitnelRow);
+                    cacheSizeRuns.push_back(cacheSizeRun);
+                    cnt = 0;
+                    SortPlan::runs = vector<queue<Row>>();
+                    cacheSizeRun = queue<Row>();
+            }
         }
     }
-
-    int totalRecords = 0;
-    SortPlan::runs = vector<queue<Row>>();  
-    for(auto &page : Memory::buffer) {
-        queue<Row>run;
-        for(auto row : page.rows) {
-             run.push(row);
-             totalRecords++;
+    if(cnt > 0) {
+        Tree::buildTree();
+        while(cacheSizeRun.size() < cnt) 
+        { 
+            Row row = Tree::getWinner();
+            cacheSizeRun.push(row);
         }
-        run.push(senitnelRow);
-        SortPlan::runs.push_back(run);
+        cacheSizeRun.push(senitnelRow);
+        cacheSizeRuns.push_back(cacheSizeRun);
+        cnt = 0;
     }
-
+    // int totalRecords = 0;
+    // SortPlan::runs = vector<queue<Row>>();  
+    // for(auto &page : Memory::buffer) {
+    //     queue<Row>run;
+    //     for(auto row : page.rows) {
+    //          run.push(row);
+    //          totalRecords++;
+    //     }CACHE_SIZE
+    SortPlan::runs = cacheSizeRuns;
     int totalPages = (int)ceil((double)totalRecords/PAGE_SIZE);
     Tree::buildTree();
     Page outputPage; // take it from memory
     string filename= "run_" + to_string(runNumber);
     string filePath = SortPlan::pass_0_dirname+"/"+filename;
     int pidx = 0;
-    int cnt=0;
+    cnt=0;
     SortPlan::runPriority.push({totalPages, runNumber, 0});
     while(cnt < totalRecords) {
         Row row = Tree::getWinner();

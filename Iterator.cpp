@@ -6,9 +6,6 @@ Row::Row ()
 	// TRACE (true);
 } // Row::Row
 
-Row::Row(int size) {
-		this->size = size;
-}
 
 Row::~Row ()
 {
