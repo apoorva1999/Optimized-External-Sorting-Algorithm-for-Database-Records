@@ -166,6 +166,11 @@ bool SortIterator::next(Row &row) {
 		cout<<c<<" ";
 	}
 	cout<<endl;
+
+
+	// string filename = "sortedData";
+	// int pidx = 0;
+	// Disk::flushPage(filename, pidx);
     // if (_currentPageIndex == -1 || _currentRowIndex >= _currentPage.rows.size()) {
     //     ++_currentPageIndex;
     //     _currentPage = Disk::readPage("initial_runs", _currentPageIndex);

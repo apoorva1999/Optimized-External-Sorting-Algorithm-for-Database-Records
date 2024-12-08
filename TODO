@@ -4,3 +4,13 @@
 - less than fan in
 - equal to fan in
 - much larger than fan in
+
+
+
+- Cache size mini runs
+- graceful internal to external
+- readme
+- comments
+- ovc reuse
+- testcases
+- why seg fault for >1000   DONE
