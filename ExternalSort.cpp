@@ -15,7 +15,7 @@ int ExternalSort::currentRunNumber = 0;
 int ExternalSort::currentRecords = 0;
 int ExternalSort::totalRecords = 0;
 int ExternalSort::currentRunsToMerge = InternalSort::runNumber;
-vector<int> ExternalSort::inputPageIdx = vector<int>(MEMORY_SIZE-1,0);
+vector<int> ExternalSort::inputPageIdx = vector<int>(FAN_IN,0);
 
 string getFilePath(int passNumber, int runNumber) {
     return "pass_" + to_string(passNumber) + "/" + "run_" + to_string(runNumber);

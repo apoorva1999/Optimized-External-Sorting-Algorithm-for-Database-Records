@@ -76,7 +76,7 @@ bool Tree::compare(int idx1, int idx2) {
 }
     
 void Tree::buildTree() {
-    int totalRuns = MEMORY_SIZE-1;
+    int totalRuns = FAN_IN;
     ExternalSort::inputPageIdx = vector<int>(totalRuns, 1);
     vector<int>sentinel_record (1, INT_MAX);
     sentinelRow = Row(); 
