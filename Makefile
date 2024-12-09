@@ -56,4 +56,5 @@ co :
 	co $(REV) -l $(HDRS) $(SRCS) $(DOCS) $(SCRS)
 
 clean :
-	@rm -f $(OBJS) a.out a.out.stackdump trace
+	@rm -f $(OBJS) a.out a.out.stackdump trace 
+	@rm -rf pass_*
