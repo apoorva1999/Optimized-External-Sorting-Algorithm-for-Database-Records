@@ -19,7 +19,7 @@ vector<RunMetadata> SortPlan::runsToMergeMetadata = vector<RunMetadata>();
 int getInitialRunsToMerge() {
 	return (InternalSort::runNumber-2)%(FAN_IN-1)+2;
 }
-
+int pidx =0 ;
 void getSmallestRunsMetadataToMerge(int totalRunstoMerge)
 {
 	int cnt=0;
@@ -166,22 +166,11 @@ bool SortIterator::next(Row &row) {
 		cout<<c<<" ";
 	}
 	cout<<endl;
-
-
-	// string filename = "sortedData";
-	// int pidx = 0;
-	// Disk::flushPage(filename, pidx);
-    // if (_currentPageIndex == -1 || _currentRowIndex >= _currentPage.rows.size()) {
-    //     ++_currentPageIndex;
-    //     _currentPage = Disk::readPage("initial_runs", _currentPageIndex);
-    //     _currentRowIndex = 0;
-    //     if (_currentPage.rows.empty()) {
-    //         return false;
-    //     }
-    // }
-
-    // row = _currentPage.rows[_currentRowIndex];
-    // ++_currentRowIndex;
+	
+	Memory::buffer[0].rows.push_back(row);
+	if(Memory::buffer[0].rows.size() == PAGE_SIZE) {
+		Disk::flushPage("outputFile", Memory::buffer[0], pidx, 0);
+	}
     ++_produced;
     return true;
 }

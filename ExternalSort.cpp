@@ -75,12 +75,12 @@ void ExternalSort::mergeSortedRuns() {
         currentRecords++;
         outputPage.rows.push_back(row);
         if(outputPage.rows.size() == PAGE_SIZE) {
-            Disk::flushPage(outputFilePath, outputPage, pidx);
+            Disk::flushPage(outputFilePath, outputPage, pidx, 1);
         }
     }
 
     if(outputPage.rows.size()) {
-        Disk::flushPage(outputFilePath, outputPage, pidx);
+        Disk::flushPage(outputFilePath, outputPage, pidx, 1);
     }
 
     int numberOfPagesInCurrentRun = (int)ceil((double)totalRecords/PAGE_SIZE);
@@ -92,4 +92,6 @@ void ExternalSort::mergeLastRun() {
     fillMemoryWithRuns();
     createRunsFromMemory();
     Tree::buildTree();
+    Memory::buffer = vector<Page>(MEMORY_SIZE);
+
 }

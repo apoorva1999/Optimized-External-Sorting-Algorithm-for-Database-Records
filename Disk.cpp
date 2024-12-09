@@ -44,7 +44,7 @@ Page Disk::readPage(string filename, int pidx) {
     return p;
 }
 
-void Disk::flushPage(string filename, Page &p, int &pidx) {
+void Disk::flushPage(string filename, Page &p, int &pidx, bool appendOVC) {
     ofstream outfile;
     if (pidx == 0)
         outfile.open(filename);
@@ -56,11 +56,11 @@ void Disk::flushPage(string filename, Page &p, int &pidx) {
         return;
     }
     for (Row &row : p.rows) {
+        if(appendOVC)
         row.record.push_back(row.ovc);
         std::ostringstream oss;
         for (size_t i = 0; i < row.record.size(); ++i)
         {
-            // cout<<row.record[i]<<"rowwww ";
             oss << row.record[i];
             if (i < row.record.size() - 1)
             {

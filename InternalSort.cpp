@@ -66,12 +66,12 @@ void InternalSort::generateRuns() {
         cnt++;
         outputPage.rows.push_back(row);
         if(outputPage.rows.size() == PAGE_SIZE) {
-            Disk::flushPage(filePath, outputPage, pidx);
+            Disk::flushPage(filePath, outputPage, pidx, 1);
         }   
     }
 
      if(outputPage.rows.size() >0) {
-        Disk::flushPage(filePath, outputPage, pidx);
+        Disk::flushPage(filePath, outputPage, pidx, 1);
     }
 
     runNumber++;
