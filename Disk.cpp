@@ -7,6 +7,42 @@
 namespace fs = std::filesystem;
 
 // int Disk::pidx = 0; // Definition and initialization
+Page Disk::readPage(string filename, int pidx) {
+    ifstream infile(filename);
+    Page p;
+    if (!infile.is_open()) {
+        std::cerr << "Error: Could not open file "<<filename<<" for reading"<<endl;
+        throw exception();
+    }
+
+    std::string line;
+    int startRow = pidx * PAGE_SIZE;
+    int currentRow = 0;
+    while (currentRow < startRow && std::getline(infile, line)) {
+        ++currentRow; 
+    }
+    while (p.rows.size() < PAGE_SIZE && std::getline(infile, line)) {
+        std::istringstream iss(line);
+        Row row;
+        std::string value;
+        vector<int>values;
+        while (std::getline(iss, value, ' ')) {
+            values.push_back(std::stoi(value));
+        
+        }
+        if(values.size() > ROW_SIZE) {
+            row.ovc = values.back();
+            row.record.assign(values.begin(), values.end() - 1);
+        }
+        else {
+            row.record = values;
+        }
+        p.rows.push_back(row);
+    }
+
+    infile.close();
+    return p;
+}
 
 void Disk::flushPage(string filename, Page &p, int &pidx) {
     ofstream outfile;
@@ -19,7 +55,8 @@ void Disk::flushPage(string filename, Page &p, int &pidx) {
         std::cerr << "Error: Could not open file " << filename << " for writing.\n";
         return;
     }
-    for (const Row &row : p.rows) {
+    for (Row &row : p.rows) {
+        row.record.push_back(row.ovc);
         std::ostringstream oss;
         for (size_t i = 0; i < row.record.size(); ++i)
         {
@@ -29,6 +66,7 @@ void Disk::flushPage(string filename, Page &p, int &pidx) {
             {
                 oss << " "; 
             }
+            
         }
         outfile << oss.str() << "\n"; 
     }
@@ -58,33 +96,4 @@ void Disk::deleteDirectories(const fs::path& directoryPath, const std::string& p
     } catch (const fs::filesystem_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
-}
-
-Page Disk::readPage(string filename, int pidx) {
-    ifstream infile(filename);
-    Page p;
-    if (!infile.is_open()) {
-        std::cerr << "Error: Could not open file "<<filename<<" for reading"<<endl;
-        throw exception();
-    }
-
-    std::string line;
-    int startRow = pidx * PAGE_SIZE;
-    int currentRow = 0;
-    while (currentRow < startRow && std::getline(infile, line)) {
-        ++currentRow; 
-    }
-    while (p.rows.size() < PAGE_SIZE && std::getline(infile, line)) {
-        std::istringstream iss(line);
-        Row row;
-        std::string value;
-
-        while (std::getline(iss, value, ' ')) {
-            row.record.push_back(std::stoi(value));
-        }
-        p.rows.push_back(row);
-    }
-
-    infile.close();
-    return p;
 }

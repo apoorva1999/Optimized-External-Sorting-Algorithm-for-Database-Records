@@ -15,7 +15,7 @@ typedef uint8_t byte;
 #define MEMORY_SIZE 3 //3 pages
 #define FAN_IN (MEMORY_SIZE-1)
 #define CACHE_SIZE 2 //10 records
-
+#define ROW_SIZE 10
 #define yesno(b)	((b) ? "yes" : "no")
 
 // call-through to assert() from <assert.h>
