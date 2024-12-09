@@ -11,6 +11,6 @@
 - graceful internal to external
 - readme
 - comments
-- ovc reuse
+- ovc reuse DONE
 - testcases
 - why seg fault for >1000   DONE
