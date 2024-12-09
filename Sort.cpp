@@ -37,7 +37,7 @@ SortPlan::SortPlan (char const * const name, Plan * const input)
 	: Plan (name), _input (input)
 {
 	TRACE (true);
-} // SortPlan::SortPlan
+} // SortPlan::SortPlanrean
 
 SortPlan::~SortPlan ()
 {
@@ -172,6 +172,9 @@ bool SortIterator::next(Row &row) {
 		Disk::flushPage("outputFile", Memory::buffer[0], pidx, 0);
 	}
     ++_produced;
+	if(_produced == _consumed && Memory::buffer[0].rows.size()>0) {
+		Disk::flushPage("outputFile", Memory::buffer[0], pidx, 0);
+	}
     return true;
 }
 

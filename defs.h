@@ -11,12 +11,15 @@ typedef uint8_t byte;
 // 4kb
 
 
-#define PAGE_SIZE 3 // 5 records
-#define MEMORY_SIZE 3 //3 pages
-#define FAN_IN (MEMORY_SIZE-1)
-#define CACHE_SIZE 2 //10 records
-#define ROW_SIZE 10
-#define yesno(b)	((b) ? "yes" : "no")
+// default values
+
+static int PAGE_SIZE = 10;  // 5 records
+static int MEMORY_SIZE = 3; //3 pages
+static int FAN_IN = (MEMORY_SIZE-1);
+static int CACHE_SIZE = 2; //2 records
+static int ROW_SIZE = 10;
+static int INPUT_SIZE = 200;
+#define yesno(b) ((b) ? "yes" : "no")
 
 // call-through to assert() from <assert.h>
 //
