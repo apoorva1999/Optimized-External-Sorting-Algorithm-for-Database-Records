@@ -12,7 +12,7 @@ void printConfiguration() {
     std::cout << " " << std::setw(20) << "Metric	" << " | " << std::setw(20) << "Value" << " \n";
     std::cout << "----------------------------------------------------------------\n";
     std::cout << " " << std::setw(20) << "Memory Size	" << " | " << std::setw(20) << MEMORY_SIZE << " Pages" << " \n";
-    std::cout << " " << std::setw(20) << "Page Size		" << " | " << std::setw(20) << PAGE_SIZE << " Records" << " \n";
+    std::cout << " " << std::setw(20) << "Page Size	" << " | " << std::setw(20) << PAGE_SIZE << " Records" << " \n";
     std::cout << " " << std::setw(20) << "Cache Size	" << " | " << std::setw(20) << CACHE_SIZE << " Records" << " \n";
     std::cout << " " << std::setw(20) << "Input Size	" << " | " << std::setw(20) << INPUT_SIZE << " Records" << " \n";
     std::cout << " " << std::setw(20) << "Number of Columns	" << " | " << std::setw(20) << ROW_SIZE << " Columns" << " \n";

@@ -3,7 +3,6 @@
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NONE='\033[0m'
-
 # run_test testdir testnumber
 run_test () {
     local testdir=$1
@@ -24,7 +23,7 @@ run_test () {
 	echo -e "test:      "
 	cat $testfile
     fi
-    eval $(cat $testfile) | tee tests-out/$testnum.out > tests-out/$testnum.err
+    eval $(cat $testfile) 2> tests-out/$testnum.err | tee tests-out/$testnum.out
 
     echo $? > tests-out/$testnum.rc
 
@@ -87,10 +86,9 @@ run_and_check () {
 	fi
 	exit 0
     fi
-    if (( $verbose == 1 )); then
+    
 	echo -e "running test $testnum: "
-	cat $testdir/$testnum.desc
-    fi
+    cat $testdir/$testnum.desc  
     run_test $testdir $testnum $verbose
 
     local output_file="tests-out/$testnum.out"
