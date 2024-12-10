@@ -49,7 +49,7 @@ bool WitnessIterator::next (Row & row)
 	if ( ! _input->next (row))  return false;
 	++ _rows;
 	for(auto col:row.record) {
-		_xor|=col;
+		_xor^=col;
 	}
 	if(_prevRow.record.empty())
 	 _prevRow = row;
