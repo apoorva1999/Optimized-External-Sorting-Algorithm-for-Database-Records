@@ -57,4 +57,6 @@ co :
 
 clean :
 	@rm -f $(OBJS) a.out a.out.stackdump trace 
-	@rm -rf pass_*
+	
+clean_disk :
+	@rm -rf tests/pass_*

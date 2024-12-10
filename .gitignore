@@ -1,7 +1,8 @@
 764_slides/*
 .vscode
 *.o
-run*
+run_*
 Test.exe
 table.txt
 generateData.exe
+*outputFile*
