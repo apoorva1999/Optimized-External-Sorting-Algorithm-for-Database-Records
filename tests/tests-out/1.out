@@ -1,6 +1,16 @@
 make: Entering directory '/home/apoorva/cs764'
-make: 'Test.exe' is up to date.
+g++  -g -Og -D_DEBUG -O0 -ansi -pedantic -std=c++20   -c -o Test.o Test.cpp
+g++ -g -Og -D_DEBUG -O0 -ansi -pedantic -std=c++20  -o Test.exe defs.o Assert.o Test.o Iterator.o Scan.o Filter.o Sort.o Witness.o TournamentTree.o InternalSort.o Disk.o ExternalSort.o
 make: Leaving directory '/home/apoorva/cs764'
+----------------------------------------------------------------
+              Metric	 |                Value 
+----------------------------------------------------------------
+         Memory Size	 |                    3 Pages 
+          Page Size		 |                   10 Records 
+          Cache Size	 |                    2 Records 
+          Input Size	 |                  300 Records 
+   Number of Columns	 |                   10 Columns 
+----------------------------------------------------------------
 Scan.cpp:33:~ScanIterator produced 301 of 300 rows
 Filter.cpp:36:~FilterIterator FILTER produced 151 of 301 rows
 Witness.cpp:34:~WitnessIterator input witnessed TOTAL_ROWS = 151

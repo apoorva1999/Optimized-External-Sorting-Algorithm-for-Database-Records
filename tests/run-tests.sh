@@ -21,10 +21,11 @@ run_test () {
     fi
     local testfile=$testdir/$testnum.run
     if (( $verbose == 1 )); then
-	echo -n "test:      "
+	echo -e "test:      "
 	cat $testfile
     fi
-    eval $(cat $testfile) > tests-out/$testnum.out 2> tests-out/$testnum.err
+    eval $(cat $testfile) | tee tests-out/$testnum.out > tests-out/$testnum.err
+
     echo $? > tests-out/$testnum.rc
 
     # post: execute this after the test is done, to clean up
@@ -32,7 +33,7 @@ run_test () {
     if [[ -f $postfile ]]; then
 	eval $(cat $postfile)
 	if (( $verbose == 1 )); then
-	    echo -n "post-test: "
+	    echo -e "post-test: "
 	    cat $postfile
 	fi
     fi
@@ -87,7 +88,7 @@ run_and_check () {
 	exit 0
     fi
     if (( $verbose == 1 )); then
-	echo -n -e "running test $testnum: "
+	echo -e "running test $testnum: "
 	cat $testdir/$testnum.desc
     fi
     run_test $testdir $testnum $verbose
