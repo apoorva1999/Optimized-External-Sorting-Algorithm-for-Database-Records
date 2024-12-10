@@ -12,7 +12,6 @@ public:
 	vector<int> record;
 	int ovc = 0;
 	Row () ;
-	Row(int size);
 	virtual ~Row ();
 	// ...
 private:

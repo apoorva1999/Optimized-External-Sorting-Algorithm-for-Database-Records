@@ -48,15 +48,10 @@ bool ScanIterator::next(Row &row)
 			string str = _plan->_currentLine;
 			stringstream ss(str);
 			int num;
-			// cout<<"SCAN"<<endl;
 			while (ss >> num)
 			{
-				// cout<<num<<" ";
 				row.record.push_back(num);
-			}
-			// cout<<endl;
-
-			
+			}			
 		}
 
 		++_count;
@@ -73,19 +68,3 @@ void ScanIterator::free(Row &row)
 	row.record = vector<int>();
 	TRACE(true);
 } // ScanIterator::free
-
-/*
-ScanPlan
-	- name
-	- count
-
-	- init
-		- new ScanIterator(plan)
-
-	- ScanIterator
-		- plan
-		- rowcount
-		- next
-		- free
-
-*/

@@ -23,4 +23,6 @@ private:
 	Iterator * const _input;
 	RowCount _rows;
 	int _xor;
+	int _inversions;
+	Row _prevRow;
 }; // class WitnessIterator

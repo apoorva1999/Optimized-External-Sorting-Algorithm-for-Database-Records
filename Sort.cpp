@@ -59,9 +59,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	TRACE (true);
 // SORT
 	Page page;
-	if (filesystem::exists(SortPlan::pass_0_dirname)) {
-        std::cout << "Directory already exists: " << SortPlan:: pass_0_dirname << std::endl;
-    } else if(!filesystem::create_directory(SortPlan::pass_0_dirname)) {
+	if(!filesystem::exists(SortPlan::pass_0_dirname) && !filesystem::create_directory(SortPlan::pass_0_dirname)) {
 		cerr<<"Couldn't create directory "<<SortPlan::pass_0_dirname<<endl;
 		return;//TODO: handle
 	}

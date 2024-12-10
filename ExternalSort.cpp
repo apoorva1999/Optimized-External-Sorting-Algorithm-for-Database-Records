@@ -61,9 +61,7 @@ void ExternalSort::mergeSortedRuns() {
     Page outputPage;
 
     string outputDir = "pass_" + to_string(currentPassNumber);
-    if (filesystem::exists(outputDir)) {
-       cout<< "Directory already exists: " << outputDir << std::endl;
-    } else if(!filesystem::create_directory(outputDir)) {
+    if(!filesystem::exists(outputDir) && !filesystem::create_directory(outputDir)) {
 		cout<<"Couldn't create directory "<<outputDir<<endl;
 		return;
 	}

@@ -6,17 +6,16 @@
 #include "Disk.h"
 
 
-void cleanup() {
-	std::filesystem::path targetDirectory = "./"; // Change to your target directory
-    std::string pattern = "pass_";
-	Disk::deleteDirectories(targetDirectory,pattern);
-}
+
 
 int main (int argc, char * argv [])
 {
-	cleanup();
+
 	TRACE (true);
-	
+	if(argc > 1) {
+		INPUT_SIZE = stoi(argv[1]);
+	}
+
 	Plan * const plan =
 			new WitnessPlan ("output",
 				new SortPlan ("*** The main thing! ***",

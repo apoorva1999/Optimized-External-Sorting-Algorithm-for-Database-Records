@@ -20,7 +20,7 @@ Iterator * WitnessPlan::init () const
 
 WitnessIterator::WitnessIterator (WitnessPlan const * const plan) :
 	_plan (plan), _input (plan->_input->init ()),
-	_rows (0), _xor(0)
+	_rows (0), _xor(0), _inversions(0), _prevRow()
 {
 	TRACE (true);
 } // WitnessIterator::WitnessIterator
@@ -31,9 +31,15 @@ WitnessIterator::~WitnessIterator ()
 
 	delete _input;
 
-	traceprintf ("%s witnessed %lu rows with XOR %d\n ",
+	traceprintf ("%s witnessed TOTAL_ROWS = %lu\n ",
 			_plan->_name,
-			(unsigned long) (_rows), _xor);
+			(unsigned long) (_rows));
+	traceprintf ("%s witnessed XOR = %lu\n ",
+			_plan->_name,
+			(unsigned long)(_xor));
+	traceprintf ("%s witnessed INVERSIONS = %lu\n ",
+		_plan->_name,
+		(unsigned long)(_inversions));
 } // WitnessIterator::~WitnessIterator
 
 bool WitnessIterator::next (Row & row)
@@ -44,6 +50,19 @@ bool WitnessIterator::next (Row & row)
 	++ _rows;
 	for(auto col:row.record) {
 		_xor|=col;
+	}
+	if(_prevRow.record.empty())
+	 _prevRow = row;
+
+	else {
+		for(int i=0;i<ROW_SIZE;i++) {
+			if(row.record[i] < _prevRow.record[i]) {
+				_inversions++;
+			} else if(row.record[i] > _prevRow.record[i]) {
+				break;
+			}
+		}
+		_prevRow = row;
 	}
 	return true;
 } // WitnessIterator::next
