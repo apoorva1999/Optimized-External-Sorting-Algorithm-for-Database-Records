@@ -78,3 +78,4 @@ clean :
 	
 clean_disk :
 	@rm -rf tests/pass_*
+	@rm -rf pass_*

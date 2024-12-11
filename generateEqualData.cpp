@@ -11,7 +11,7 @@ int main()
     int count = 1000;    // Number of rows
     int cols = 10;       // Number of columns per row
 
-    ofstream output_file("table.txt"); 
+    ofstream output_file("database.txt"); 
 
     vector<int> fixedRow(cols);
 

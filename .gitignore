@@ -3,7 +3,7 @@
 *.o
 run_*
 Test.exe
-table.txt
+database.txt
 generateData.exe
 *outputFile*
 tests/tests-out/**

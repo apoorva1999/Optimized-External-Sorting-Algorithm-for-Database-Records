@@ -4,10 +4,8 @@
 #include <sstream>
 
 ScanPlan::ScanPlan(char const *const name, RowCount const count)
-	: Plan(name), _count(count), _file("table.txt")
+	: Plan(name), _count(count), _file("database.txt")
 {
-
-	// ifstream file("table.txt");
 	TRACE(true);
 } // ScanPlan::ScanPlan
 

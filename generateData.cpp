@@ -15,7 +15,7 @@ int main(int argc, char * argv [])
     int max = 100;
     int range = max - min + 1;
     int cols = 10;
-    ofstream output_file("table.txt");
+    ofstream output_file("database.txt");
     ostream_iterator<string> output_iterator(output_file, " ");
     for (int i = 0; i < count; i++)
     {

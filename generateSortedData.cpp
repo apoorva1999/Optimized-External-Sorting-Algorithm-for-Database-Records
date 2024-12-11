@@ -12,7 +12,7 @@ int main()
     RowCount count = 1000; // Number of rows
     int cols = 10;         // Number of columns per row
 
-    ofstream output_file("table.txt");
+    ofstream output_file("database.txt");
     ostream_iterator<string> output_iterator(output_file, " ");
 
     // Initialize the first row with random values
