@@ -3,6 +3,7 @@
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NONE='\033[0m'
+CYAN='\033[1;36m'
 # run_test testdir testnumber
 run_test () {
     local testdir=$1
@@ -23,7 +24,13 @@ run_test () {
 	echo -e "test:      "
 	cat $testfile
     fi
-    eval $(cat $testfile) 2> tests-out/$testnum.err | tee tests-out/$testnum.out
+    if (( verbose == 1 )); then
+    # Print to console and save to files
+    eval $(cat "$testfile") 2> "tests-out/$testnum.err" | tee "tests-out/$testnum.out"
+    else
+        # Save to files only
+        eval $(cat "$testfile") > "tests-out/$testnum.out" 2> "tests-out/$testnum.err"
+    fi
 
     echo $? > tests-out/$testnum.rc
 
@@ -96,9 +103,11 @@ run_and_check () {
     local total_rows_after=$(grep "output witnessed TOTAL_ROWS" "$output_file" | awk -F'=' '{print $2}' | xargs)
     local xor_before=$(grep "input witnessed XOR" "$output_file" | awk -F'=' '{print $2}' | xargs)
     local xor_after=$(grep "output witnessed XOR" "$output_file" | awk -F'=' '{print $2}' | xargs)
+    local inversions_before=$(grep "input witnessed INVERSIONS" "$output_file" | awk -F'=' '{print $2}' | xargs)
+
     local inversions_after=$(grep "output witnessed INVERSIONS" "$output_file" | awk -F'=' '{print $2}' | xargs)
     
-     local passed=true
+    local passed=true
 
     if [[ "$total_rows_before" != "$total_rows_after" ]]; then
         echo -e "Test $testnum: ${RED}FAILED${NONE} - TOTAL_ROWS mismatch (before: $total_rows_before, after: $total_rows_after)"
@@ -116,6 +125,9 @@ run_and_check () {
     fi
 
     if $passed; then
+        echo -e "${CYAN}Witnessed TOTAL ROWS (before: $total_rows_before, after: $total_rows_after)"
+        echo -e "Witnessed XOR (before: $xor_before, after: $xor_after)"
+        echo -e "Witnessed INVERSIONS (before: $inversions_before, after: $inversions_after) ${NONE}"
         echo -e "Test $testnum: ${GREEN}PASSED${NONE}"
     else
         # Optional: exit on failure or continue
@@ -123,33 +135,6 @@ run_and_check () {
             exit 1
         fi
     fi
-    # rccheck=$(check_test $testdir $testnum $contrunning rc)
-    # outcheck=$(check_test $testdir $testnum $contrunning out)
-    # errcheck=$(check_test $testdir $testnum $contrunning err)
-    # othercheck=0
-    # if [[ -f $testdir/$testnum.other ]]; then
-	# othercheck=$(check_test $testdir $testnum $contrunning other)
-    # fi
-    # # echo "results: outcheck:$outcheck errcheck:$errcheck"
-    # if (( $rccheck == 0 )) && (( $outcheck == 0 )) && (( $errcheck == 0 )) && (( $othercheck == 0 )); then
-	# echo -e "test $testnum: ${GREEN}passed${NONE}"
-	# if (( $verbose == 1 )); then
-	#     echo ""
-	# fi
-    # else
-	# if (( $rccheck == 1 )); then
-	#     print_error_message $testnum $contrunning rc
-	# fi
-	# if (( $outcheck == 1 )); then
-	#     print_error_message $testnum $contrunning out
-	# fi
-	# if (( $errcheck == 1 )); then
-	#     print_error_message $testnum $contrunning err
-	# fi
-	# if (( $othercheck == 1 )); then
-	#     print_error_message $testnum $contrunning other
-	# fi
-    # fi
 }
 
 # usage: call when args not parsed, or when help needed

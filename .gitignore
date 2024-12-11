@@ -6,3 +6,4 @@ Test.exe
 table.txt
 generateData.exe
 *outputFile*
+tests/tests-out/**

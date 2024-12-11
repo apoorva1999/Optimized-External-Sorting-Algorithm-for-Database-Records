@@ -45,6 +45,7 @@ int main (int argc, char * argv [])
 	delete it;
 
 	delete plan;
-// 
+	printConfiguration();
+
 	return 0;
 } // main
