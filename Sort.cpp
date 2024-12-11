@@ -16,9 +16,11 @@ vector<queue<Row>> SortPlan::runs;
 string SortPlan::pass_0_dirname = "pass_0";
 priority_queue<RunMetadata> SortPlan::runPriority;
 vector<RunMetadata> SortPlan::runsToMergeMetadata = vector<RunMetadata>();
+
 int getInitialRunsToMerge() {
 	return (InternalSort::runNumber-2)%(FAN_IN-1)+2;
 }
+
 int pidx =0 ;
 void getSmallestRunsMetadataToMerge(int totalRunstoMerge)
 {

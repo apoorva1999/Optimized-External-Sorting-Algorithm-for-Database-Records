@@ -9,7 +9,6 @@
 
 using namespace std;
 
-// vector<int>currentPageIndex;
 vector<Node> Tree::tree;
 
 Row sentinelRow;
@@ -22,17 +21,14 @@ int value(int ovc) {
     return (ovc&0xFFFFFF);
 }
 
-    //OVC and compare
+//OVC and compare
 bool Tree::compare(int idx1, int idx2) {
         
         Row& row1 = SortPlan::runs[idx1].front();
         Row& row2 = SortPlan::runs[idx2].front();
         int n = row1.record.size();
         int col = 0;
-        // cout<<"idx1 "<<idx1<<" idx2 "<<idx2<<endl;
         if(row1.ovc!=0 && row2.ovc!=0) {
-            // cout<<"row1: ovc-> "<<row1.ovc<<" off->"<<offset(row1.ovc)<<" val->"<<value(row1.ovc)<<endl;
-            // cout<<"row2: ovc-> "<<row2.ovc<<" off->"<<offset(row2.ovc)<<" val->"<<value(row2.ovc)<<endl;   
 
             if(offset(row1.ovc) < offset(row2.ovc)) {
                 return false; // row1 has smaller offset than row2, therefore its bigger and loser
@@ -56,22 +52,16 @@ bool Tree::compare(int idx1, int idx2) {
 
         for(int i=col;i<n;i++) {
             if(row1.record[i]<row2.record[i]) {
-                // cout<<"i "<<i<<" row2.record[i] "<<row2.record[i]<<endl;
                 int ovc = (i<<24) | (row2.record[i] & 0xFFFFFF); //storing offest in first 8 bits and value at last 24 bits
                 row2.ovc = ovc;
-                // cout<<"ovc for row2 "<<row2.ovc<<" at i "<<i<< endl;
                 return true;
             } else if(row1.record[i]>row2.record[i]) {
                 int ovc = (i<<24) | (row1.record[i] & 0xFFFFFF);
                 row1.ovc = ovc;
-                // cout<<"ovc for row1 "<<ovc<<" at i "<<i<< endl;
                 return false;
             }
         }
         row2.ovc = n<<24;
-
-                // cout<<"ovc for row2 "<< row2.ovc<<" at i "<<n<< endl;
-
         return true;
 }
     
@@ -105,7 +95,6 @@ void Tree::buildTree() {
     for(int i=leafn-1;i>0;i--) {
         int left_child = 2*i;
         int right_child = 2*i+1;
-        // cout<<runs[tree[left_child].wid].front().record[0]<<" "<<runs[tree[right_child].wid].front().record[0]<<endl;
         if(compare(tree[left_child].wid, tree[right_child].wid)) {
             tree[i].lid = tree[right_child].wid;
             tree[i].wid = tree[left_child].wid;
@@ -114,19 +103,12 @@ void Tree::buildTree() {
             tree[i].wid = tree[right_child].wid;
         }
     }
-
-    // for(int i=1;i<n;i++) {
-    //     cout<<"i: "<<i<<": ";
-    //     cout<<"lid: "<<tree[i].lid<<", ";
-    //     cout<<"wid: "<<tree[i].wid<<endl;
-    // }
 }
 
 void Tree::replacementSelection(int idx) {
     int pidx = idx/2; // parent index
     int leafn = SortPlan::runs.size()/2;
     int lidx = leafn + pidx; // leaf index
-    // cout<<"lidx: "<<lidx<<" idx: "<<idx<<endl;
     if(compare(idx, tree[lidx].lid)) {
         tree[lidx].wid = idx;
         tree[lidx].lid = tree[lidx].lid;
@@ -146,14 +128,6 @@ void Tree::replacementSelection(int idx) {
         }
         lidx = pidx;
     }
-
-    // cout<<"**********"<<endl;
-    //         for(int i=1;i<runs.size();i++) {
-    //         cout<<"i: "<<i<<": ";
-    //         cout<<"lid: "<<tree[i].lid<<", ";
-    //         cout<<"wid: "<<tree[i].wid<<endl;
-    //     }
-    // cout<<"**********"<<endl;
 }
 
 Row Tree::getWinner() {
@@ -164,7 +138,6 @@ Row Tree::getWinner() {
     if(SortPlan::runs[winnerIdx].empty() && row.record[0]!=INT_MAX) {
           int runNumber = SortPlan::runsToMergeMetadata[winnerIdx].runNumber;
           int passNumber = SortPlan::runsToMergeMetadata[winnerIdx].passNumber;
-        // if(SortPlan::runs[winnerIdx].front().record[0] == INT_MAX) ;
         string filename = "pass_" + to_string(passNumber) + "/run_" + to_string(runNumber);
         int nextPageIdx = ExternalSort::inputPageIdx[winnerIdx];
         ExternalSort::inputPageIdx[winnerIdx]++;
@@ -181,4 +154,3 @@ Row Tree::getWinner() {
     replacementSelection(winnerIdx);
     return row;
 }
-// void Tree::mergeSortedRuns() 
