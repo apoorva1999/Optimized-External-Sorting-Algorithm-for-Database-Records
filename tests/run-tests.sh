@@ -11,7 +11,7 @@ run_test () {
     local verbose=$3
 
     # pre: execute this after before the test is done, to set up
-    local prefile=$testdir/$testnum.pre
+    local prefile=$testdir/test.pre
     if [[ -f $prefile ]]; then
 	eval $(cat $prefile)
 	if (( $verbose == 1 )); then
