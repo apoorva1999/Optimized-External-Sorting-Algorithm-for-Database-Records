@@ -13,10 +13,13 @@ vector<Node> Tree::tree;
 
 Row sentinelRow;
 
+
+// Function to extract the offset (higher-order 8 bits) from a 32-bit integer
 int offset(int ovc) {
     return ovc>>24;
 }
 
+// Function to extract the value (lower-order 24 bits) from a 32-bit integer
 int value(int ovc) {
     return (ovc&0xFFFFFF);
 }

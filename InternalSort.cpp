@@ -8,9 +8,9 @@
 #include"Sort.h"
 
 int InternalSort::runNumber = 0;
-Row senitnelRow;
+Row senitnelRow; // Sentinel row used as a marker for the end of runs
 
-
+// Function to generate a mini-run of size equal to the cache size
 void generateCacheSizeRuns(vector<queue<Row>>&cacheSizeRuns, int &cnt) {
     queue<Row> cacheSizeRun;
     Tree::buildTree();
@@ -24,6 +24,7 @@ void generateCacheSizeRuns(vector<queue<Row>>&cacheSizeRuns, int &cnt) {
     cnt = 0;
 }
 
+// Function for generating sorted runs from the data in memory
 void InternalSort::generateRuns() {
     TRACE(true);
     SortPlan::runs = vector<queue<Row>>();
@@ -70,6 +71,7 @@ void InternalSort::generateRuns() {
         }   
     }
 
+    // Flush any remaining rows in the output page
      if(outputPage.rows.size() >0) {
         Disk::flushPage(filePath, outputPage, pidx, 1);
     }

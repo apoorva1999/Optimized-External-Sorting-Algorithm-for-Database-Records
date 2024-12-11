@@ -17,6 +17,8 @@ int main(int argc, char * argv [])
     int cols = 10;
     ofstream output_file("database.txt");
     ostream_iterator<string> output_iterator(output_file, " ");
+
+     // Generate rows of random data
     for (int i = 0; i < count; i++)
     {
         Row row = Row();
