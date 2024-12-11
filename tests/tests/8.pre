@@ -1,1 +1,1 @@
-make clean_disk -C ../ 
+make clean_disk -C ../ && make generateData.exe -C ../ && ../generateData.exe 10

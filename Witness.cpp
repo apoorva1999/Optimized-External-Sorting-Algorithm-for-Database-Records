@@ -1,5 +1,5 @@
 #include "Witness.h"
-
+#include "iostream"
 WitnessPlan::WitnessPlan (char const * const name, Plan * const input)
 	: Plan (name), _input (input)
 {

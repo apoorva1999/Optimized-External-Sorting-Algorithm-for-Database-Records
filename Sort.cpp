@@ -59,8 +59,8 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 {
 	Tree tree;
 	TRACE (true);
-// SORT
-	Page page; Page page; // Page for storing rows temporarily
+	// SORT
+	Page page; // Page for storing rows temporarily
 	if(!filesystem::exists(SortPlan::pass_0_dirname) && !filesystem::create_directory(SortPlan::pass_0_dirname)) {
 		cerr<<"Couldn't create directory "<<SortPlan::pass_0_dirname<<endl;
 		return;//TODO: handle
@@ -80,15 +80,6 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			// If memory is full, generate initial runs
 			if(Memory::buffer.size() == FAN_IN) {
 				InternalSort::generateRuns();
-				// make initial runs
-				/*
-					P page size
-					M memory size
-					(M-1)*P runs of 1 record
-					gotta merge them to make a sorted run of (M-1)*P records	
-					TournamentTree.sort(memory) //stores initial sorted run of (M-1)*P records in disk
-					clear the memory
-				*/
 				Memory::buffer = vector<Page>();
 			}
 		}

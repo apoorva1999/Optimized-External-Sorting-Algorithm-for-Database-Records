@@ -15,6 +15,10 @@ int main(int argc, char * argv [])
     int max = 100;
     int range = max - min + 1;
     int cols = 10;
+
+    // Seed the random number generator
+    srand(static_cast<unsigned>(time(0)));
+
     ofstream output_file("database.txt");
     ostream_iterator<string> output_iterator(output_file, " ");
 
