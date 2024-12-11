@@ -20,7 +20,11 @@ SRCS=	defs.cpp Assert.cpp Test.cpp \
 OBJS=	defs.o Assert.o Test.o \
 		Iterator.o Scan.o Filter.o Sort.o Witness.o TournamentTree.o InternalSort.o Disk.o ExternalSort.o
 
-
+SRCS_GENERATE = defs.cpp Assert.cpp \
+		Iterator.cpp Scan.cpp Filter.cpp Sort.cpp Witness.cpp  TournamentTree.cpp InternalSort.cpp Disk.cpp ExternalSort.cpp generateSortedData.cpp
+OBJS_GENERATE=	defs.o Assert.o  \
+		Iterator.o Scan.o Filter.o Sort.o Witness.o TournamentTree.o InternalSort.o Disk.o ExternalSort.o generateSortedData.o
+	
 # RCS assists
 REV=-q -f
 MSG=no message
@@ -29,8 +33,8 @@ MSG=no message
 #
 Test.exe : Makefile $(OBJS)
 	g++ $(CPPFLAGS) -o Test.exe $(OBJS)
-generateData.exe : Makefile $(OBJS)
-	g++ $(CPPFLAGS) -o generateData.exe $(OBJS)
+generateSortedData.exe : Makefile $(OBJS_GENERATE)
+	g++ $(CPPFLAGS) -o generateSortedData.exe $(OBJS_GENERATE)
 trace : a.out Makefile
 	@date > trace
 	@size -t a.out $(OBJS) | sort -r >> trace

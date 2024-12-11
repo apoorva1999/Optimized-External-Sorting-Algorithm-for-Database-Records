@@ -33,6 +33,7 @@ tests is easy; just add the relevant files to the tests directory at the lowest 
 The files needed to describe a test number `n` are:
 - `n.run`: How to run the test (which arguments it needs, etc.)
 - `n.desc`(optional): A short text description of the test
+- `n.pre`: Script to clean up files generated in the previous tests
 
 ### Steps to Run the Test Script
 

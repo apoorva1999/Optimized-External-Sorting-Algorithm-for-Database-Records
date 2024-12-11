@@ -17,8 +17,8 @@ void printConfiguration() {
     std::cout << " " << std::setw(20) << "Input Size	" << " | " << std::setw(20) << INPUT_SIZE << " Records" << " \n";
     std::cout << " " << std::setw(20) << "Number of Columns	" << " | " << std::setw(20) << ROW_SIZE << " Columns" << " \n";
     std::cout << "----------------------------------------------------------------\n";
-
 }
+
 int main (int argc, char * argv [])
 {
 
