@@ -5,9 +5,7 @@
 - Student ID-2: 9087239522
 
 ## Overview 
-Implemented an optimized External Sort algorithm to efficiently sort database records utilizing the underlying storage
-hierarchy by implementing cache-size mini-runs, RAM-to-disk spilling, and graceful degradation. Implemented k-way External Merge Sort algorithm in C++ using a Tree-of-Losers tournament data structure and
-Offset-Value Coding (OVC) to minimize column-value comparisons, optimizing merge patterns and page sizes
+Implemented an optimized External Sort algorithm to efficiently sort database records utilizing the underlying storage hierarchy by implementing cache-size mini-runs, RAM-to-disk spilling, and graceful degradation. Implemented k-way External Merge Sort algorithm in C++ using a Tree-of-Losers tournament data structure and Offset-Value Coding (OVC) to minimize column-value comparisons, optimizing merge patterns and page sizes
 
 ## Description
 
