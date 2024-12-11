@@ -4,12 +4,16 @@
 #include <string.h>
 #include "iostream"
 using namespace std;
-int main()
+int main(int argc, char * argv [])
 {
+    RowCount count = 1000;
+
+    if(argc > 1) {
+		count = stoi(argv[1]);
+	} 
     int min = 0;
     int max = 100;
     int range = max - min + 1;
-    RowCount count = 1000;
     int cols = 10;
     ofstream output_file("table.txt");
     ostream_iterator<string> output_iterator(output_file, " ");
