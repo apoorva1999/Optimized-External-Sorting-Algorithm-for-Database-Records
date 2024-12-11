@@ -47,6 +47,7 @@ bool WitnessIterator::next (Row & row)
 	TRACE (true);
 
 	if ( ! _input->next (row))  return false;
+	
 	++ _rows;
 	for(auto col:row.record) {
 		_xor^=col;
@@ -58,6 +59,7 @@ bool WitnessIterator::next (Row & row)
 		for(int i=0;i<ROW_SIZE;i++) {
 			if(row.record[i] < _prevRow.record[i]) {
 				_inversions++;
+				break;
 			} else if(row.record[i] > _prevRow.record[i]) {
 				break;
 			}

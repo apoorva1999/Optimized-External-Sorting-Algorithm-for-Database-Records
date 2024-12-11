@@ -10,10 +10,10 @@ typedef uint8_t byte;
 
 
 // System Configuration
-#define PAGE_SIZE 10  // 5 records
-#define MEMORY_SIZE 3 //3 pages
-#define FAN_IN (MEMORY_SIZE-1)
-#define CACHE_SIZE 2 //2 records
+#define PAGE_SIZE 10  // 10 records
+#define MEMORY_SIZE 5 //5 pages
+#define FAN_IN (MEMORY_SIZE-1) //4 pages 
+#define CACHE_SIZE 3 //3 records
 
 // User Input Default Values
 static int ROW_SIZE = 10;
