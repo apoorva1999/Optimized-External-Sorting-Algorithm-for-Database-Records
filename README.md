@@ -47,11 +47,14 @@ The files needed to describe a test number `n` are:
     - `-v` (verbose: print what each test is doing on the console)
     - `-t n` (run only test `n`)
 
-After running the tests, some output files are generated. Understanding output of each test
-- `n.out`: contains all the logs from each test
-- `n.err`: contains error message if any
-- `n.rc` : contains return code of the test
-- `pass_*/run_*` : When tests are run individually, you can see the passes and runs generated for that test including ovc
-- `outputFile` : When tests are run individually, this file stores the sorted records without ovc
+After running the tests, there are some output files generate which help in understanding result of each test
+
+- Following files are generated in the `tests/tests-out` directory. 
+    -  `n.out`: contains all the logs from each test
+    - `n.err`: contains error message if any
+    - `n.rc` : contains return code of the test 
+- Following files are generated in the `tests` directory
+    - `pass_*/run_*` : When tests are run individually, you can see the passes and runs generated for that test including ovc
+    - `outputFile` : When tests are run individually, this file stores the sorted records without ovc
 
 
