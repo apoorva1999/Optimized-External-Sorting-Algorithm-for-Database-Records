@@ -6,7 +6,6 @@
 
 namespace fs = std::filesystem;
 
-// int Disk::pidx = 0; // Definition and initialization
 // Reads a page from a specified file based on the page index.
 // Returns a Page object containing up to PAGE_SIZE rows of data.
 Page Disk::readPage(string filename, int pidx) {
@@ -20,7 +19,7 @@ Page Disk::readPage(string filename, int pidx) {
     std::string line;
     int startRow = pidx * PAGE_SIZE;
     int currentRow = 0;
-    // Skip rows until reaching the starting row for the requested page.
+    // Skip rows until reaching the starting idx for the requested page.
     while (currentRow < startRow && std::getline(infile, line)) {
         ++currentRow; 
     }
@@ -35,6 +34,7 @@ Page Disk::readPage(string filename, int pidx) {
             values.push_back(std::stoi(value));
         
         }
+        // sets the ovc of the row
         if(values.size() > ROW_SIZE) {
             row.ovc = values.back();
             row.record.assign(values.begin(), values.end() - 1);
@@ -63,7 +63,7 @@ void Disk::flushPage(string filename, Page &p, int &pidx, bool appendOVC) {
         return;
     }
     // Write each row in the Page to the file, formatting values with spaces in between.
-    // Include the overflow column value (ovc) if appendOVC is true.
+    // Include the ovc if appendOVC is true.
     for (Row &row : p.rows) {
         if(appendOVC)
         row.record.push_back(row.ovc);
