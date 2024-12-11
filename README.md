@@ -1,11 +1,10 @@
-## Student ID-1:
-## Student ID-2: 9087239522
-
 # External Sorting for Large Databases
 
+## Group members
+- Student ID-1: 9086615722
+- Student ID-2: 9087239522
 
-## Overview
-
+## Overview 
 Implemented an optimized External Sort algorithm to efficiently sort database records utilizing the underlying storage
 hierarchy by implementing cache-size mini-runs, RAM-to-disk spilling, and graceful degradation. Implemented k-way External Merge Sort algorithm in C++ using a Tree-of-Losers tournament data structure and
 Offset-Value Coding (OVC) to minimize column-value comparisons, optimizing merge patterns and page sizes
@@ -54,4 +53,5 @@ After running the tests, some output files are generated. Understanding output o
 - `n.rc` : contains return code of the test
 - `pass_*/run_*` : When tests are run individually, you can see the passes and runs generated for that test including ovc
 - `outputFile` : When tests are run individually, this file stores the sorted records without ovc
+
 
