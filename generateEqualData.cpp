@@ -11,6 +11,9 @@ int main()
     int count = 1000;    // Number of rows
     int cols = 10;       // Number of columns per row
 
+    // Seed the random number generator
+    srand(static_cast<unsigned>(time(0)));
+    
     ofstream output_file("database.txt"); 
 
     vector<int> fixedRow(cols);
