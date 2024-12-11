@@ -89,7 +89,7 @@ void ExternalSort::mergeSortedRuns() {
     SortPlan::runPriority.push({numberOfPagesInCurrentRun, currentRunNumber, currentPassNumber});
 }
 
-// Handles merging of the final run
+// Builds the tournament tree for merging the last run
 void ExternalSort::mergeLastRun() {
 
     fillMemoryWithRuns();

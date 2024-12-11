@@ -14,14 +14,17 @@
 
 vector<queue<Row>> SortPlan::runs;
 string SortPlan::pass_0_dirname = "pass_0";
-priority_queue<RunMetadata> SortPlan::runPriority;
+priority_queue<RunMetadata> SortPlan::runPriority;  //holds metadata of all the sorted runs present
 vector<RunMetadata> SortPlan::runsToMergeMetadata = vector<RunMetadata>();
 
+// Calculates the optimal number of runs to merge in the 1st Pass for Gracefully degrading from 1 step to n step merge
 int getInitialRunsToMerge() {
 	return (InternalSort::runNumber-2)%(FAN_IN-1)+2;
 }
 
+
 int pidx =0 ;
+// This function give us the smallest runs to merge in the current step to reduce I/O volume
 void getSmallestRunsMetadataToMerge(int totalRunstoMerge)
 {
 	int cnt=0;
@@ -84,7 +87,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 			}
 		}
 	}
-	// // When rows are not multiple of pageSize or memorySize
+	// When rows are not multiple of pageSize or memorySize
 	if(page.rows.size()>0) {
 		Memory::buffer.push_back(page);
 	}
@@ -126,7 +129,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		ExternalSort::currentRunNumber = 0;
 	}
 
-	 // Merge the last remaining run
+	 // Prepares for merging the last run, but actual merging happens on-demand in the next function
 	getSmallestRunsMetadataToMerge(FAN_IN);
 	ExternalSort::mergeLastRun();
 
@@ -149,7 +152,7 @@ SortIterator::~SortIterator ()
 			(unsigned long) (_consumed));
 } // SortIterator::~SortIterator
 
-
+// Final merge happens on-demand when it->run () is called
 bool SortIterator::next(Row &row) {
     TRACE(true);
 

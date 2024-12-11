@@ -24,7 +24,7 @@ int value(int ovc) {
     return (ovc&0xFFFFFF);
 }
 
-//OVC and compare
+// Updates/sets OVC and compares based on that. If offset and value are same, then performs record level comparison
 bool Tree::compare(int idx1, int idx2) {
         
         Row& row1 = SortPlan::runs[idx1].front();
