@@ -60,7 +60,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 	Tree tree;
 	TRACE (true);
 // SORT
-	Page page;
+	Page page; Page page; // Page for storing rows temporarily
 	if(!filesystem::exists(SortPlan::pass_0_dirname) && !filesystem::create_directory(SortPlan::pass_0_dirname)) {
 		cerr<<"Couldn't create directory "<<SortPlan::pass_0_dirname<<endl;
 		return;//TODO: handle
@@ -69,11 +69,15 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		++ _consumed;
 		page.rowCount ++;
 		page.rows.push_back(row);
+
+		// If the page is full, add it to memory and process runs
 		if(page.rowCount == PAGE_SIZE) {
 			TRACE(true);
 			Memory::buffer.push_back(page);
 			page.rowCount = 0;
 			page.rows = vector<Row>();
+
+			// If memory is full, generate initial runs
 			if(Memory::buffer.size() == FAN_IN) {
 				InternalSort::generateRuns();
 				// make initial runs
@@ -131,6 +135,7 @@ SortIterator::SortIterator (SortPlan const * const plan) :
 		ExternalSort::currentRunNumber = 0;
 	}
 
+	 // Merge the last remaining run
 	getSmallestRunsMetadataToMerge(FAN_IN);
 	ExternalSort::mergeLastRun();
 
@@ -172,6 +177,8 @@ bool SortIterator::next(Row &row) {
 		Disk::flushPage("outputFile", Memory::buffer[0], pidx, 0);
 	}
     ++_produced;
+
+	// Flush remaining rows if all rows have been produced
 	if(_produced == _consumed && Memory::buffer[0].rows.size()>0) {
 		Disk::flushPage("outputFile", Memory::buffer[0], pidx, 0);
 	}
