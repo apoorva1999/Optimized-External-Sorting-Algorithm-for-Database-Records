@@ -45,14 +45,15 @@ bool FilterIterator::next (Row & row)
 	for (;;)
 	{
 		if ( ! _input->next (row))  return false;
-				// cout<<"FILTER"<<endl;
 
-		// for(auto val:row.record) {
-		// 	cout<<val<<" ";
-		// }
-		// cout<<endl;
 		++ _consumed;
-		if(row.record[0] < 30 || row.record[0] > 70) //User is interested in the median range. Range based filtering. Input data will be in range 0-100
+		/* 
+			Following filter gives us the outliers
+			This is a range-based filtering. Input data is in the range of 0-100
+			User is interested in values which are too less or too high
+			i.e first column value < 30 or > 70
+		*/
+		if(row.record[0] < 30 || row.record[0] > 70) 
 			break;
 		_input->free (row);
 	}
