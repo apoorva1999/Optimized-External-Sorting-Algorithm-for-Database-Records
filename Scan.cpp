@@ -38,7 +38,7 @@ ScanIterator::~ScanIterator()
 bool ScanIterator::next(Row &row)
 {
 	TRACE(true);
-	if (_count > _plan->_count)
+	if (_count >= _plan->_count)
 		return false;
 
 	if (_plan->_file.is_open())
