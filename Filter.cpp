@@ -52,9 +52,8 @@ bool FilterIterator::next (Row & row)
 		// }
 		// cout<<endl;
 		++ _consumed;
-		if (_consumed % 2 != 0) // the fake filter predicate
+		if(row.record[0] < 30 || row.record[0] > 70) //User is interested in the median range. Range based filtering. Input data will be in range 0-100
 			break;
-
 		_input->free (row);
 	}
 

@@ -7,6 +7,8 @@
 namespace fs = std::filesystem;
 
 // int Disk::pidx = 0; // Definition and initialization
+// Reads a page from a specified file based on the page index.
+// Returns a Page object containing up to PAGE_SIZE rows of data.
 Page Disk::readPage(string filename, int pidx) {
     ifstream infile(filename);
     Page p;
@@ -18,9 +20,12 @@ Page Disk::readPage(string filename, int pidx) {
     std::string line;
     int startRow = pidx * PAGE_SIZE;
     int currentRow = 0;
+    // Skip rows until reaching the starting row for the requested page.
     while (currentRow < startRow && std::getline(infile, line)) {
         ++currentRow; 
     }
+    // Read rows from the file, parse them into Row objects, and add them to the Page.
+    // Stop reading once the Page reaches PAGE_SIZE rows.
     while (p.rows.size() < PAGE_SIZE && std::getline(infile, line)) {
         std::istringstream iss(line);
         Row row;
@@ -44,6 +49,8 @@ Page Disk::readPage(string filename, int pidx) {
     return p;
 }
 
+// Writes a Page object to the specified file. Appends to the file if pidx > 0.
+// Resets the Page object after writing.
 void Disk::flushPage(string filename, Page &p, int &pidx, bool appendOVC) {
     ofstream outfile;
     if (pidx == 0)
@@ -55,6 +62,8 @@ void Disk::flushPage(string filename, Page &p, int &pidx, bool appendOVC) {
         std::cerr << "Error: Could not open file " << filename << " for writing.\n";
         return;
     }
+    // Write each row in the Page to the file, formatting values with spaces in between.
+    // Include the overflow column value (ovc) if appendOVC is true.
     for (Row &row : p.rows) {
         if(appendOVC)
         row.record.push_back(row.ovc);
@@ -70,13 +79,13 @@ void Disk::flushPage(string filename, Page &p, int &pidx, bool appendOVC) {
         }
         outfile << oss.str() << "\n"; 
     }
-
+    // Clear the rows in the Page and reset the rowCount to 0 after writing.
     outfile.close();
     p.rows = vector<Row>();
     p.rowCount = 0;
 }
 
-
+// Deletes directories in the specified path that match a given name pattern.
 void Disk::deleteDirectories(const fs::path& directoryPath, const std::string& pattern) {
          try {
         // Iterate over all entries in the directory

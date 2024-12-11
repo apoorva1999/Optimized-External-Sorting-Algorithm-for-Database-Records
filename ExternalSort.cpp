@@ -17,10 +17,13 @@ int ExternalSort::totalRecords = 0;
 int ExternalSort::currentRunsToMerge = InternalSort::runNumber;
 vector<int> ExternalSort::inputPageIdx = vector<int>(FAN_IN,0);
 
+// Constructs a file path for a specific run in a given pass
+// Example: pass_1/run_0
 string getFilePath(int passNumber, int runNumber) {
     return "pass_" + to_string(passNumber) + "/" + "run_" + to_string(runNumber);
 }
 
+// Loads the first page of each run to be merged into memory buffers
 void fillMemoryWithRuns() {
     Memory::buffer = vector<Page>(MEMORY_SIZE);
     for(int i=0;i<SortPlan::runsToMergeMetadata.size();i++) {
@@ -36,6 +39,7 @@ void fillMemoryWithRuns() {
     }
 }
 
+// Converts the pages in memory into runs
 void createRunsFromMemory() {
     SortPlan::runs = vector<queue<Row>>();
     ExternalSort::totalRecords = 0;
@@ -51,7 +55,7 @@ void createRunsFromMemory() {
     }
 }
 
-
+// Merges sorted runs into a single output run using tournament tree
 void ExternalSort::mergeSortedRuns() {
     
     fillMemoryWithRuns();
@@ -85,6 +89,7 @@ void ExternalSort::mergeSortedRuns() {
     SortPlan::runPriority.push({numberOfPagesInCurrentRun, currentRunNumber, currentPassNumber});
 }
 
+// Handles merging of the final run
 void ExternalSort::mergeLastRun() {
 
     fillMemoryWithRuns();

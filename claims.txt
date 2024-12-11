@@ -1,6 +1,9 @@
+Student ID-1:
+Student ID-2: 9087239522
+
 Internal Sort (5 points)
 External Sort (5 points)
-Graceful Degradation - internal to external sort (3 points)
+Graceful Degradation - internal to external sort (2 points)
 Graceful Degradation - 1 step to n step merge (3 points)
 Merge planning / optimization (3 points)
 CPU cache sized runs (3 points)
@@ -12,3 +15,5 @@ Test case performance (2 points)
 Scan (1 point)
 Witness - count, parity, inversions (3 points)
 Filter (1 point)
+
+Total Claim - 44 points
