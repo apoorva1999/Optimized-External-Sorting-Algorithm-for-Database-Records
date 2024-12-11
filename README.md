@@ -18,15 +18,19 @@ The files needed to describe a test number `n` are:
 - `n.desc`(optional): A short text description of the test
 - `n.pre`: Script to clean up files generated in the previous tests
 
-
 ### Steps to Run the Test Script
 
 - cd tests
 - Run `run-tests.sh` command to run all the tests
 
-
 The options for `run-tests.sh` include:
 
 - `-v` (verbose: print what each test is doing on the console)
 - `-t n` (run only test `n`)
+
+After running the tests, some files are generated. Understanding output of each test
+- `n.out`: contains all the logs from each test
+- `n.err`: contains error message if any
+- `n.rc` : contains return code of the test
+- `pass_*/run_*` : When tests are run individually, you can see the passes and runs generated for that test including ovc
 
