@@ -1,11 +1,28 @@
 # External Sorting for Large Databases
 
 
-## Summary
+## Overview
 
 Developed an optimized External Sort algorithm to efficiently sort database records utilizing the underlying storage
 hierarchy by implementing cache-size mini-runs, RAM-to-disk spilling, and graceful degradation. Implemented k-way External Merge Sort algorithm in C++ using a Tree-of-Losers tournament data structure and
 Offset-Value Coding (OVC) to minimize column-value comparisons, optimizing merge patterns and page sizes
+
+## Description
+
+### Techniques Implemented by our submission and the corresponding Source Files
+
+- **Tournament trees**: `File TournamentTree.cpp`
+- **Offset-value coding**: `File TournamentTree.cpp`
+- **Minimum count of row & column comparisons**
+- **Cache-size mini runs**: `File InternalSort.cpp`
+- **External sort**: `File ExternalSort.cpp`
+- **Graceful degradation**: `File Sort.cpp`
+  - **Into merging** 
+  - **Beyond one merge step**
+- **Optimized merge patterns**: `File Sort.cpp`
+- **Verifying**: 
+  - **sets of rows & values**: `File Witness.cpp`
+  - **inversions**: `File Witness.cpp`
 
 ## Testing
 
