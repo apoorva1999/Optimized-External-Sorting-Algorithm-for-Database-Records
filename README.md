@@ -49,4 +49,5 @@ After running the tests, some output files are generated. Understanding output o
 - `n.err`: contains error message if any
 - `n.rc` : contains return code of the test
 - `pass_*/run_*` : When tests are run individually, you can see the passes and runs generated for that test including ovc
+- `outputFile` : When tests are run individually, this file stores the sorted records without ovc
 
